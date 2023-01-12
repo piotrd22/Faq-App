@@ -1,12 +1,13 @@
 const router = require("express").Router();
 const questionController = require("../controllers/questionController");
+const verifyToken = require("../middleware/verifyToken");
 
 router.get("/", questionController.getQuestions);
 
-router.post("/", questionController.postQuestion);
+router.post("/", verifyToken, questionController.postQuestion);
 
-router.put("/:id", questionController.updateQuestion);
+router.put("/:id", verifyToken, questionController.updateQuestion);
 
-router.delete("/:id", questionController.deleteQuestion);
+router.delete("/:id", verifyToken, questionController.deleteQuestion);
 
 module.exports = router;
