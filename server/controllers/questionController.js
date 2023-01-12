@@ -1,4 +1,5 @@
 const Question = require("../models/questionSchema");
+const User = require("../models/userSchema");
 
 const getQuestions = async (req, res) => {
   try {
@@ -29,14 +30,21 @@ const getQuestions = async (req, res) => {
 
 const postQuestion = async (req, res) => {
   try {
-    const { body, answer } = req.body;
-    const newQuestion = new Question({
-      body: body,
-      answer: answer,
-    });
+    const { id } = req.user;
+    const user = await User.findById(id);
 
-    await newQuestion.save();
-    res.status(200).json(newQuestion);
+    if (user.admin) {
+      const { body, answer } = req.body;
+      const newQuestion = new Question({
+        body: body,
+        answer: answer,
+      });
+
+      await newQuestion.save();
+      res.status(200).json(newQuestion);
+    } else {
+      res.status(401).json("You are not allowed");
+    }
   } catch (error) {
     res.status(500).json(error);
   }
@@ -44,8 +52,15 @@ const postQuestion = async (req, res) => {
 
 const updateQuestion = async (req, res) => {
   try {
-    await Question.findByIdAndUpdate(req.params.id, { $set: req.body });
-    res.status(200).json("Question successfully updated.");
+    const { id } = req.user;
+    const user = await User.findById(id);
+
+    if (user.admin) {
+      await Question.findByIdAndUpdate(req.params.id, { $set: req.body });
+      res.status(200).json("Question successfully updated.");
+    } else {
+      res.status(401).json("You are not allowed");
+    }
   } catch (error) {
     res.status(500).json(error);
   }
@@ -53,8 +68,15 @@ const updateQuestion = async (req, res) => {
 
 const deleteQuestion = async (req, res) => {
   try {
-    await Question.findByIdAndDelete(req.params.id);
-    res.status(200).json("Question successfully deleted.");
+    const { id } = req.user;
+    const user = await User.findById(id);
+
+    if (user.admin) {
+      await Question.findByIdAndDelete(req.params.id);
+      res.status(200).json("Question successfully deleted.");
+    } else {
+      res.status(401).json("You are not allowed");
+    }
   } catch (error) {
     res.status(500).json(error);
   }
