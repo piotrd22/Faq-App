@@ -10,5 +10,4 @@ Backend Stack:
 Frontend Stack:
 
 - React,
-- TypeScript,
 - Tailwind
