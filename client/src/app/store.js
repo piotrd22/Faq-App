@@ -26,3 +26,5 @@ export const store = configureStore({
       serializableCheck: false,
     }).concat(checkTokenExpirationMiddleware),
 });
+
+export default store;
