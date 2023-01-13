@@ -5,9 +5,10 @@ import { useSearchParams } from "react-router-dom";
 
 export default function Home() {
   const [questions, setQuesions] = useState([]);
-  const [search, setSearch] = useState("");
-  const [resultsFor, setResultsFor] = useState("");
   const [searchParams, setSearchParams] = useSearchParams({});
+  const [search, setSearch] = useState(searchParams.get("search"));
+  const [resultsFor, setResultsFor] = useState(`Results for: ${search}`);
+  
 
   const getQuestions = async () => {
     try {
