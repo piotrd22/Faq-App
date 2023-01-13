@@ -1,22 +1,19 @@
 import axios from "axios";
-import React from "react";
+import { useState, useEffect }  from "react";
 import Question from "../components/Question";
 import { useSearchParams } from "react-router-dom";
 
 export default function Home() {
-  const [questions, setQuesions] = React.useState([]);
-  const [search, setSearch] = React.useState("");
-  const [resultsFor, setResultsFor] = React.useState("");
+  const [questions, setQuesions] = useState([]);
+  const [search, setSearch] = useState("");
+  const [resultsFor, setResultsFor] = useState("");
   const [searchParams, setSearchParams] = useSearchParams({});
 
   const getQuestions = async () => {
     try {
       const searchParam = searchParams.get("search");
-      let url = "http://localhost:8080/api/questions";
-      if (searchParam) {
-        url += `?search=${search}`;
-      }
-      const response = await axios.get(url);
+      const url = "http://localhost:8080/api/questions";
+      const response = await axios.get(searchParam ? url + `?search=${search}` : url);
       setQuesions(response.data);
     } catch (error) {
       console.log(error);
@@ -35,7 +32,7 @@ export default function Home() {
     setSearch("");
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     getQuestions();
   }, [searchParams]);
 
