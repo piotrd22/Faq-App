@@ -24,9 +24,11 @@ app.use(helmet());
 //ROUTES
 const questionRouter = require("./routes/questionRoute");
 const authRouter = require("./routes/authRoute");
+const commentRoute = require("./routes/commentRoute");
 
 app.use("/api/questions", questionRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/comments", commentRoute);
 
 mongoose.set("strictQuery", false);
 
