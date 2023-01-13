@@ -13,6 +13,7 @@ const getQuestions = async (req, res) => {
             body: 1,
             answer: 1,
             createdAt: 1,
+            updatedAt: 1,
             _id: 1,
           },
         },
