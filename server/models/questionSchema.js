@@ -13,6 +13,12 @@ const QuestionSchema = new Schema(
       required: true,
       max: 700,
     },
+    comments: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Comment",
+      },
+    ],
   },
   { timestamps: true }
 );

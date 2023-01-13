@@ -1,4 +1,4 @@
-export default function Question({body, answer, updatedAt}) {
+export default function Question({ body, answer, updatedAt }) {
   return (
     <div className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box p-3 my-6">
       <input type="checkbox" className="peer" />
