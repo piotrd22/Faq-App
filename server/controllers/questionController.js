@@ -88,4 +88,21 @@ const deleteQuestion = async (req, res) => {
   }
 };
 
-module.exports = { getQuestions, postQuestion, updateQuestion, deleteQuestion };
+const getQuestionById = async (req, res) => {
+  try {
+    const questions = await Question.findById(req.params.id).populate(
+      "comments"
+    );
+    res.status(200).json(questions);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+module.exports = {
+  getQuestions,
+  postQuestion,
+  updateQuestion,
+  deleteQuestion,
+  getQuestionById,
+};
