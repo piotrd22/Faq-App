@@ -7,11 +7,11 @@ import AddNewQuestion from "./pages/AddNewQuestion";
 function App() {
   return (
     <div className="App">
-      <Navbar/>
+      <Navbar />
       <Routes>
         <Route path="" element={<Home />} />
         <Route path="admin" element={<AdminLogin />} />
-        <Route path="add-new-question" element={<AddNewQuestion />} /> 
+        <Route path="add-new-question" element={<AddNewQuestion />} />
       </Routes>
     </div>
   );

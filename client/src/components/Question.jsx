@@ -1,13 +1,9 @@
-
-import { ImBin } from "react-icons/im"
-import { FiEdit } from "react-icons/fi"
+import { ImBin } from "react-icons/im";
+import { FiEdit } from "react-icons/fi";
 
 export default function Question({ body, answer, updatedAt }) {
-  
-  const deleteQuestion = () => {
+  const deleteQuestion = () => {};
 
-  }
-  
   return (
     <div className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box p-3 my-6">
       <input type="checkbox" className="peer" />
@@ -21,7 +17,7 @@ export default function Question({ body, answer, updatedAt }) {
           </p>
         </div>
         <div className="flex items-end">
-          <FiEdit className="mx-5 cursor-pointer"/>
+          <FiEdit className="mx-5 cursor-pointer" />
           <ImBin className="cursor-pointer" onClick={deleteQuestion} />
         </div>
       </div>
