@@ -8,7 +8,7 @@ export default function Navbar() {
       <div className="container flex flex-wrap items-center justify-between mx-auto">
         <Link to="/" className="flex items-center">
           <img src={logo} className="h-36 mr-3 sm:h-36" alt="Flowbite Logo" />
-          <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
+          <span className="self-center text-xl font-semibold dark:text-white">
             Frequently Asked Questions
           </span>
         </Link>
