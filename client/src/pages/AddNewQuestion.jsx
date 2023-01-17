@@ -1,7 +1,41 @@
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 export default function AddNewQuestion() {
+  const { user } = useSelector((state) => state.auth);
+
+  const notify = () =>
+    toast("Question has been added!", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+
+  const fetchPostQuestion = async (data) => {
+    const config = {
+      headers: {
+        token: "Bearer " + user.accessToken,
+      },
+    };
+
+    const res = await axios.post(
+      `http://localhost:8080/api/questions`,
+      data,
+      config
+    );
+
+    return res.data;
+  };
+
   const {
     register,
     handleSubmit,
@@ -9,12 +43,37 @@ export default function AddNewQuestion() {
     reset,
   } = useForm();
 
-  async function onSubmit(data) {
-    reset();
-  }
+  const onSubmit = (data) => {
+    const question = {
+      body: data.question,
+      answer: data.answer,
+    };
+
+    fetchPostQuestion(question)
+      .then(() => {
+        notify();
+        reset();
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  };
 
   return (
     <div className="container mx-auto p-5">
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
+
       <Link to="/" className="btn">
         &#8592; Back
       </Link>

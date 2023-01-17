@@ -35,7 +35,7 @@ const signin = async (req, res) => {
       username: username,
     });
     if (!log_user) {
-      return res.status(404).json("404 USER NOT FOUND");
+      return res.status(401).json("Unathorized");
     }
 
     const userPassw = await bcrypt.compare(
@@ -43,7 +43,7 @@ const signin = async (req, res) => {
       log_user.password
     );
     if (!userPassw) {
-      return res.status(409).json("409 WRONG PASSWORD");
+      return res.status(401).json("Unathorized");
     }
 
     const accessToken = jwt.sign(
