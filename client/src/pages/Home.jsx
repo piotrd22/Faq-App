@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState, useEffect }  from "react";
+import { useState, useEffect } from "react";
 import Question from "../components/Question";
 import { useSearchParams } from "react-router-dom";
 import { Link } from "react-router-dom"
@@ -9,12 +9,14 @@ export default function Home() {
   const [searchParams, setSearchParams] = useSearchParams({});
   const [search, setSearch] = useState(searchParams.get("search") ? searchParams.get("search") : "");
   const [resultsFor, setResultsFor] = useState(search ? `Results for: ${search}` : "");
-  
+ 
   const getQuestions = async () => {
     try {
       const searchParam = searchParams.get("search");
       const url = "http://localhost:8080/api/questions";
-      const response = await axios.get(searchParam ? url + `?search=${search}` : url);
+      const response = await axios.get(
+        searchParam ? url + `?search=${search}` : url
+      );
       setQuesions(response.data);
     } catch (error) {
       console.log(error);

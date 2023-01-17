@@ -1,12 +1,13 @@
+
 import { ImBin } from "react-icons/im"
 import { FiEdit } from "react-icons/fi"
 
-export default function Question({body, answer, updatedAt}) {
-
+export default function Question({ body, answer, updatedAt }) {
+  
   const deleteQuestion = () => {
 
   }
-
+  
   return (
     <div className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box p-3 my-6">
       <input type="checkbox" className="peer" />

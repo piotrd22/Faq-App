@@ -1,5 +1,6 @@
 const Question = require("../models/questionSchema");
 const User = require("../models/userSchema");
+const Comment = require("../models/commentSchema");
 
 const getQuestions = async (req, res) => {
   try {
@@ -15,14 +16,18 @@ const getQuestions = async (req, res) => {
             createdAt: 1,
             updatedAt: 1,
             _id: 1,
+            comments: 1,
           },
         },
         { $match: { content: { $regex: new RegExp(search), $options: "i" } } },
       ]);
+
+      await Comment.populate(questions, { path: "comments" });
+
       return res.status(200).json(questions);
     }
 
-    const questions = await Question.find({});
+    const questions = await Question.find({}).populate("comments");
     res.status(200).json(questions);
   } catch (error) {
     res.status(500).json(error);
@@ -83,4 +88,21 @@ const deleteQuestion = async (req, res) => {
   }
 };
 
-module.exports = { getQuestions, postQuestion, updateQuestion, deleteQuestion };
+const getQuestionById = async (req, res) => {
+  try {
+    const questions = await Question.findById(req.params.id).populate(
+      "comments"
+    );
+    res.status(200).json(questions);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+module.exports = {
+  getQuestions,
+  postQuestion,
+  updateQuestion,
+  deleteQuestion,
+  getQuestionById,
+};

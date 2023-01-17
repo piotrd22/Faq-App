@@ -6,6 +6,8 @@ router.get("/", questionController.getQuestions);
 
 router.post("/", verifyToken, questionController.postQuestion);
 
+router.get("/:id", questionController.getQuestionById);
+
 router.put("/:id", verifyToken, questionController.updateQuestion);
 
 router.delete("/:id", verifyToken, questionController.deleteQuestion);
