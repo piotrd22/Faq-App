@@ -1,6 +1,15 @@
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { signin } from "../features/auth/authSlice";
+import { useState } from "react";
 
 export default function AdminLogin() {
+  const [isFailed, setIsFailed] = useState(false);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -8,9 +17,27 @@ export default function AdminLogin() {
     reset,
   } = useForm();
 
-  async function onSubmit(data) {
-    reset();
-  }
+  const onSubmit = (data) => {
+    const user = {
+      username: data.login,
+      password: data.password,
+    };
+
+    dispatch(signin(user))
+      .unwrap()
+      .then(() => {
+        reset();
+        setIsFailed(false);
+        navigate("/");
+      })
+      .catch((error) => {
+        if (error.response) {
+          if (error.response.status === 401) {
+            setIsFailed(true);
+          }
+        } else alert(error);
+      });
+  };
 
   return (
     <div className="container mx-auto p-5">
@@ -34,6 +61,9 @@ export default function AdminLogin() {
         {errors.password && <div className="my-2">This field is required!</div>}
 
         <button className="btn my-5 mx-auto flex">LOGIN</button>
+        {isFailed && (
+          <div className="my-4 text-center text-xl">Login failed!</div>
+        )}
       </form>
     </div>
   );

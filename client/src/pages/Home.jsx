@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Question from "../components/Question";
 import { useSearchParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function Home() {
   const [questions, setQuesions] = useState([]);
@@ -13,6 +14,8 @@ export default function Home() {
   const [resultsFor, setResultsFor] = useState(
     search ? `Results for: ${search}` : ""
   );
+
+  const { user } = useSelector((state) => state.auth);
 
   const getQuestions = async () => {
     try {
@@ -50,13 +53,7 @@ export default function Home() {
   }, [searchParams]);
 
   const questionComponents = questions.map((question) => (
-    <Question
-      key={question._id}
-      id={question._id}
-      body={question.body}
-      answer={question.answer}
-      updatedAt={question.updatedAt}
-    />
+    <Question key={question._id} question={question} setQuestions={setQuesions} />
   ));
 
   return (
@@ -97,9 +94,11 @@ export default function Home() {
           </button>
         </div>
       )}
-      <Link to="add-new-question" className="btn mt-5">
-        Add new Question
-      </Link>
+      {user && user.admin && (
+        <Link to="add-new-question" className="btn mt-5">
+          Add new Question
+        </Link>
+      )}
       {questionComponents}
     </div>
   );
