@@ -4,6 +4,9 @@ import Home from "./pages/Home";
 import AdminLogin from "./pages/AdminLogin";
 import AddNewQuestion from "./pages/AddNewQuestion";
 import { useSelector } from "react-redux";
+import Profile from "./pages/Profile";
+import AdminPanel from "./pages/AdminPanel";
+import AddNewUser from "./pages/AddNewUser";
 
 function App() {
   const { user } = useSelector((state) => state.auth);
@@ -21,6 +24,22 @@ function App() {
           path="/add-new-question"
           element={
             user && user.admin ? <AddNewQuestion /> : <Navigate to="/" />
+          }
+        />
+        <Route
+          path="/profile"
+          element={user ? <Profile /> : <Navigate to="/admin" />}
+        />
+        <Route
+          path="/admin-panel"
+          element={
+            user && user.admin ? <AdminPanel /> : <Navigate to="/admin" />
+          }
+        />
+        <Route
+          path="/admin-panel/add-new-user"
+          element={
+            user && user.admin ? <AddNewUser /> : <Navigate to="/admin" />
           }
         />
       </Routes>
