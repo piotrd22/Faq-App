@@ -11,7 +11,7 @@ export default function More() {
   const { user } = useSelector((state) => state.auth);
   const id = useParams().id;
   const [question, setQuestion] = useState({});
-  const [comments, setComments] = useState([])
+  const [comments, setComments] = useState([]);
 
   const notify = () =>
     toast.success("Comment has been added!", {
@@ -47,17 +47,17 @@ export default function More() {
   useEffect(() => {
     fetchQuestion()
       .then((res) => {
-        setQuestion(res)
-        setComments(res.comments)
-    })
+        setQuestion(res);
+        setComments(res.comments);
+      })
       .catch((error) => console.log(error));
   }, []);
 
   const fetchPostComment = async (data) => {
-    const res = await axios.post(`http://localhost:8080/api/comments`, data)
+    const res = await axios.post(`http://localhost:8080/api/comments`, data);
 
-    return res.data
-  }
+    return res.data;
+  };
 
   const handleAddComments = (newComment) => {
     setComments((prev) => [newComment, ...prev]);
@@ -72,28 +72,25 @@ export default function More() {
 
   const onSubmit = (data) => {
     const comment = {
-        body: data.comment,
-        username: user ? user.username : "Guest",
-        questionId: question._id
-      };
-  
-      fetchPostComment(comment)
-        .then((res) => {
-          handleAddComments(res)
-          notify();
-          reset();
-        })
-        .catch((error) => {
-          notifyError();
-          console.log(error);
-        });
+      body: data.comment,
+      username: user ? user.username : "Guest",
+      questionId: question._id,
+    };
+
+    fetchPostComment(comment)
+      .then((res) => {
+        handleAddComments(res);
+        notify();
+        reset();
+      })
+      .catch((error) => {
+        notifyError();
+        console.log(error);
+      });
   };
 
   const commentComponents = comments.map((comment) => (
-    <Comment
-      key={comment._id}
-      comment={comment}
-    />
+    <Comment key={comment._id} comment={comment} />
   ));
 
   return (
