@@ -66,7 +66,9 @@ export default function Question({ question, setQuestions }) {
         <p>{question.answer}</p>
         <div className="flex justify-between items-end">
           <div>
-            <p className="mt-5">{new Date(question.updatedAt).toLocaleDateString()}</p>
+            <p className="mt-5">
+              {new Date(question.updatedAt).toLocaleDateString()}
+            </p>
           </div>
           {user && user.admin && (
             <div className="flex items-end">

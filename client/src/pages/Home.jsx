@@ -53,7 +53,11 @@ export default function Home() {
   }, [searchParams]);
 
   const questionComponents = questions.map((question) => (
-    <Question key={question._id} question={question} setQuestions={setQuesions} />
+    <Question
+      key={question._id}
+      question={question}
+      setQuestions={setQuesions}
+    />
   ));
 
   return (
