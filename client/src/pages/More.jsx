@@ -73,7 +73,7 @@ export default function More() {
   const onSubmit = (data) => {
     const comment = {
       body: data.comment,
-      username: user ? user.username : "Guest",
+      username: data.username ? data.username : "Guest",
       questionId: question._id,
     };
 
@@ -90,7 +90,7 @@ export default function More() {
   };
 
   const commentComponents = comments.map((comment) => (
-    <Comment key={comment._id} comment={comment} />
+    <Comment key={comment._id} comment={comment} setComments={setComments} />
   ));
 
   return (
@@ -111,7 +111,7 @@ export default function More() {
       <Link to="/" className="btn">
         &#8592; Back
       </Link>
-      <div className="flex flex-col justify-items-center mt-6">
+      <div className="flex flex-col justify-items-center mt-6 border border-base-300 bg-base-100 rounded-box p-6 my-6">
         <div className=" text-xl font-medium">{question.body}</div>
         <div className="mt-3">
           <p>{question.answer}</p>
@@ -125,19 +125,36 @@ export default function More() {
         </div>
       </div>
 
-      <form
-        className="mt-6 sm:w-full lg:w-1/2 flex flex-col justify-items-center mx-auto"
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <input
-          placeholder="Add comment..."
-          className="input input-bordered w-full"
-          type="text"
-          {...register("comment", { required: true })}
-        />
-        {errors.comment && <div className="my-2">This field is required!</div>}
-        <button className="btn my-5 mx-auto flex">ADD COMMENT</button>
-      </form>
+      <div className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box p-3 my-6">
+        <input type="checkbox" className="peer" />
+        <div className="collapse-title text-xl font-medium">Add comment</div>
+        <div className="collapse-content ">
+          <form
+            className="mt-6 sm:w-full lg:w-1/2 flex flex-col justify-items-center mx-auto"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <input
+              type="text"
+              placeholder="Username (optional)"
+              className="input input-bordered w-full my-3"
+              {...register("username")}
+            />
+            <input
+              placeholder="Comment..."
+              className="input input-bordered w-full"
+              type="text"
+              {...register("comment", { required: true })}
+            />
+            {errors.comment && (
+              <div className="my-2">This field is required!</div>
+            )}
+            <button className="btn my-5 mx-auto flex">ADD COMMENT</button>
+          </form>
+        </div>
+      </div>
+
+      <h2 className="text-2xl mt-20">Comments: </h2>
+
       {commentComponents}
     </div>
   );

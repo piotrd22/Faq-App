@@ -3,7 +3,7 @@ import { FiEdit } from "react-icons/fi";
 
 export default function User({ user }) {
   return (
-    <div className="w-full flex items-center border rounded-xl p-3 my-4">
+    <div className="w-full flex items-center border border-base-300 bg-base-100 rounded-xl p-3 my-4">
       <div className="flex justify-between w-1/2 px-5">
         <h5 className="font-bold">{user.username}</h5>
       </div>
