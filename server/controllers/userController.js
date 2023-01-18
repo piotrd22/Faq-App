@@ -30,10 +30,7 @@ const updateUser = async (req, res) => {
 
     if (password) {
       try {
-        const userPassw = await bcrypt.compare(
-          old_password,
-          currUser.password
-        )
+        const userPassw = await bcrypt.compare(old_password, currUser.password);
         if (!userPassw) {
           return res.status(401).json("Old password doses not match!");
         }
