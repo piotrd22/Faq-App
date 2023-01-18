@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import AdminLogin from "./pages/AdminLogin";
@@ -7,6 +8,8 @@ import { useSelector } from "react-redux";
 import Profile from "./pages/Profile";
 import AdminPanel from "./pages/AdminPanel";
 import AddNewUser from "./pages/AddNewUser";
+import UpdateQuestion from "./pages/UpdateQuestion";
+import More from "./pages/More";
 
 function App() {
   const { user } = useSelector((state) => state.auth);
@@ -42,6 +45,13 @@ function App() {
             user && user.admin ? <AddNewUser /> : <Navigate to="/admin" />
           }
         />
+        <Route
+          path="/question-update/:id"
+          element={
+            user && user.admin ? <UpdateQuestion /> : <Navigate to="/" />
+          }
+        />
+        <Route path="/more/:id" element={<More />} />
       </Routes>
     </div>
   );
