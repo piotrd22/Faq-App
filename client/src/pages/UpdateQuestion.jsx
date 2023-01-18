@@ -77,7 +77,10 @@ export default function UpdateQuestion() {
       .then(() => {
         notifyUpdate();
         getQuestion(id)
-          .then((res) => setDefaultValue(res))
+          .then((res) => {
+            setValue("question", res.body, { shouldTouch: true });
+            setValue("answer", res.answer, { shouldTouch: true });
+          })
           .catch((error) => console.log(error));
       })
       .catch((error) => {
