@@ -1,15 +1,32 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import { useState, useEffect } from "react";
 
-export default function AddNewQuestion() {
+export default function UpdateQuestion() {
+  const id = useParams().id;
   const { user } = useSelector((state) => state.auth);
 
-  const notify = () =>
-    toast.success("Question has been added!", {
+  const getQuestion = async () => {
+    const res = await axios.get(`http://localhost:8080/api/questions/${id}`);
+
+    return res.data;
+  };
+
+  useEffect(() => {
+    getQuestion()
+      .then((res) => {
+        setValue("question", res.body, { shouldTouch: true });
+        setValue("answer", res.answer, { shouldTouch: true });
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
+  const notifyUpdate = () => {
+    toast.success("Question has been updated!", {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -19,6 +36,7 @@ export default function AddNewQuestion() {
       progress: undefined,
       theme: "dark",
     });
+  };
 
   const notifyError = () => {
     toast.error("Something went wrong!", {
@@ -33,15 +51,15 @@ export default function AddNewQuestion() {
     });
   };
 
-  const fetchPostQuestion = async (data) => {
+  const fetchUpdateQuestion = async (data) => {
     const config = {
       headers: {
         token: "Bearer " + user.accessToken,
       },
     };
 
-    const res = await axios.post(
-      `http://localhost:8080/api/questions`,
+    const res = await axios.put(
+      `http://localhost:8080/api/questions/${id}`,
       data,
       config
     );
@@ -49,29 +67,31 @@ export default function AddNewQuestion() {
     return res.data;
   };
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm();
-
   const onSubmit = (data) => {
     const question = {
       body: data.question,
       answer: data.answer,
     };
 
-    fetchPostQuestion(question)
+    fetchUpdateQuestion(question)
       .then(() => {
-        notify();
-        reset();
+        notifyUpdate();
+        getQuestion(id)
+          .then((res) => setDefaultValue(res))
+          .catch((error) => console.log(error));
       })
       .catch((error) => {
         notifyError();
         console.log(error);
       });
   };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm();
 
   return (
     <div className="container mx-auto p-5">
@@ -109,7 +129,7 @@ export default function AddNewQuestion() {
         />
         {errors.answer && <div className="my-2">This field is required!</div>}
 
-        <button className="btn my-5 mx-auto flex">Add question</button>
+        <button className="btn my-5 mx-auto flex">UPDATE QUESTION</button>
       </form>
     </div>
   );

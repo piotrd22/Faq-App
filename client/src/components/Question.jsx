@@ -1,7 +1,9 @@
 import { ImBin } from "react-icons/im";
 import { FiEdit } from "react-icons/fi";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import Swal from "sweetalert2";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 
@@ -9,7 +11,7 @@ export default function Question({ question, setQuestions }) {
   const { user } = useSelector((state) => state.auth);
 
   const notifyDelete = () =>
-    toast("Question has been deleted!", {
+    toast.success("Question has been deleted!", {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -19,6 +21,19 @@ export default function Question({ question, setQuestions }) {
       progress: undefined,
       theme: "dark",
     });
+
+  const notifyError = () => {
+    toast.error("Something went wrong!", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  };
 
   const fetchDeleteQuestion = async () => {
     const config = {
@@ -36,14 +51,27 @@ export default function Question({ question, setQuestions }) {
   };
 
   const deleteQuestion = () => {
-    fetchDeleteQuestion()
-      .then(() => {
-        notifyDelete();
-        setQuestions((prev) => prev.filter((x) => x._id !== question._id));
-      })
-      .catch((error) => {
-        alert(error);
-      });
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetchDeleteQuestion()
+          .then(() => {
+            notifyDelete();
+            setQuestions((prev) => prev.filter((x) => x._id !== question._id));
+          })
+          .catch((error) => {
+            notifyError();
+            console.log(error);
+          });
+      }
+    });
   };
 
   return (
@@ -72,7 +100,9 @@ export default function Question({ question, setQuestions }) {
           </div>
           {user && user.admin && (
             <div className="flex items-end">
-              <FiEdit className="mx-5 cursor-pointer" />
+              <Link to={`/question-update/${question._id}`}>
+                <FiEdit className="mx-5 cursor-pointer" />
+              </Link>
               <ImBin className="cursor-pointer" onClick={deleteQuestion} />
             </div>
           )}
