@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 
 export default function UpdateQuestion() {
   const id = useParams().id;

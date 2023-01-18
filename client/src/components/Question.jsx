@@ -106,7 +106,9 @@ export default function Question({ question, setQuestions }) {
               <ImBin className="cursor-pointer" onClick={deleteQuestion} />
             </div>
           )}
-          <button className="btn mt-3">COMMENTS</button>
+          <Link to={`/more/${question._id}`}>
+            <button className="btn mt-3">COMMENTS</button>
+          </Link>
         </div>
       </div>
     </div>
