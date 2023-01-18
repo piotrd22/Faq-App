@@ -18,8 +18,10 @@ const getUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const { password } = req.body;
+  const { password, old_password } = req.body;
   const { id, admin } = req.user;
+
+  const currUser = await User.findById(id);
 
   if (req.params.id === id || admin) {
     if ((await User.find({ username: req.body.username })).length !== 0) {
@@ -28,6 +30,14 @@ const updateUser = async (req, res) => {
 
     if (password) {
       try {
+        const userPassw = await bcrypt.compare(
+          old_password,
+          currUser.password
+        )
+        if (!userPassw) {
+          return res.status(401).json("Old password doses not match!");
+        }
+
         const salt = await bcrypt.genSalt(10);
         req.body.password = await bcrypt.hash(password, salt);
       } catch (error) {
