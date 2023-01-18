@@ -10,7 +10,6 @@ export default function UpdateUser() {
   const id = useParams().id;
   const { user } = useSelector((state) => state.auth);
 
-  const [currUser, setCurrUser] = useState({});
   const [admin, setAdmin] = useState(false);
 
   const getUser = async () => {
@@ -31,7 +30,7 @@ export default function UpdateUser() {
   useEffect(() => {
     getUser()
       .then((res) => {
-        setCurrUser(res);
+        setValue("isAdmin", res.admin, { shouldTouch: true });
         setAdmin(res.admin);
       })
       .catch((error) => console.log(error));
@@ -94,11 +93,7 @@ export default function UpdateUser() {
       });
   };
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-  } = useForm();
+  const { register, handleSubmit, setValue } = useForm();
 
   return (
     <div className="container mx-auto p-5">

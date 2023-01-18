@@ -10,6 +10,7 @@ import AddNewUser from "./pages/AddNewUser";
 import UpdateQuestion from "./pages/UpdateQuestion";
 import More from "./pages/More";
 import UpdateUser from "./pages/UpdateUser";
+import NotFound from "./pages/NotFound";
 
 function App() {
   const { user } = useSelector((state) => state.auth);
@@ -58,6 +59,7 @@ function App() {
           }
         />
         <Route path="/more/:id" element={<More />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   );
