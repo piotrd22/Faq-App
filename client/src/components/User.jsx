@@ -75,7 +75,7 @@ export default function User({ user, setUsers }) {
   };
 
   return (
-    <div className="w-full flex items-center border rounded-xl p-3 my-4">
+    <div className="w-full flex items-center border border-base-300 bg-base-100 rounded-xl p-3 my-4">
       <ToastContainer
         position="top-right"
         autoClose={5000}
