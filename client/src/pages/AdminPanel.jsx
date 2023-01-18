@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 export default function AdminPanel() {
   const [users, setUsers] = useState([]);
   const { user } = useSelector((state) => state.auth);
+
   const getUsers = async () => {
     try {
       const url = "http://localhost:8080/api/users";
@@ -26,7 +27,9 @@ export default function AdminPanel() {
     getUsers();
   }, []);
 
-  const userComponents = users.map((x) => <User key={x.username} user={x} />);
+  const userComponents = users.map((user) => (
+    <User key={user._id} user={user} setUsers={setUsers} />
+  ));
 
   return (
     <div className="container mx-auto p-3">
