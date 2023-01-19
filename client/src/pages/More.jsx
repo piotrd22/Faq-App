@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import Comment from "../components/Comment";
 
 export default function More() {
-  const { user } = useSelector((state) => state.auth);
   const id = useParams().id;
   const [question, setQuestion] = useState({});
   const [comments, setComments] = useState([]);

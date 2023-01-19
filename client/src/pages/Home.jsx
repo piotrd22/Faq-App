@@ -62,17 +62,17 @@ export default function Home() {
         setQuestions={setQuesions}
       />
     ));
-  
+
   const reverseQuestionComponent = questions
-  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-  .reverse()
-  .map((question) => (
-    <Question
-      key={question._id}
-      question={question}
-      setQuestions={setQuesions}
-    />
-  ));
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .reverse()
+    .map((question) => (
+      <Question
+        key={question._id}
+        question={question}
+        setQuestions={setQuesions}
+      />
+    ));
 
   return (
     <div className="container mx-auto p-3">

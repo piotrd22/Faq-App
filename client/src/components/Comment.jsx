@@ -4,9 +4,15 @@ import { ToastContainer, toast } from "react-toastify";
 import Swal from "sweetalert2";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import Filter from "bad-words";
+import { profanityList } from "../assets/profanity";
 
 export default function Comment({ comment, setComments }) {
   const { user } = useSelector((state) => state.auth);
+
+  const filter = new Filter();
+
+  filter.addWords(...profanityList);
 
   const notifyDelete = () =>
     toast.success("Comment has been deleted!", {
@@ -87,8 +93,10 @@ export default function Comment({ comment, setComments }) {
         theme="dark"
       />
       <div>
-        <div className="font-bold text-lg">{comment.username}</div>
-        <div>{comment.body}</div>
+        <div className="font-bold text-lg">
+          {filter.clean(comment.username)}
+        </div>
+        <div>{filter.clean(comment.body)}</div>
       </div>
       <div className="flex items-end">
         <div className="flex items-center">
