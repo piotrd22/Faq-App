@@ -46,6 +46,6 @@ mongoose.connect(process.env.DATABASE_URL, () => {
   console.log("Connected with DB! :)");
 });
 
-app.listen(process.env.PORT || 8080, () => {
+app.listen(process.env.PORT, () => {
   console.log("Backend is alive!");
 });
