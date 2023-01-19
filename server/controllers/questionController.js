@@ -50,7 +50,9 @@ const getQuestions = async (req, res) => {
       return res.status(200).json(questions);
     }
 
-    const questions = await Question.find({}).sort({updatedAt: -1}).populate("comments");
+    const questions = await Question.find({})
+      .sort({ updatedAt: -1 })
+      .populate("comments");
     res.status(200).json(questions);
   } catch (error) {
     res.status(500).json(error);

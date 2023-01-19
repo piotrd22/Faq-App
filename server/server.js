@@ -21,6 +21,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(morgan("common"));
 app.use(helmet());
 
+app.use(express.static(path.join(__dirname, "build")));
+
+app.get("/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
+
 //ROUTES
 const questionRouter = require("./routes/questionRoute");
 const authRouter = require("./routes/authRoute");
@@ -40,6 +46,6 @@ mongoose.connect(process.env.DATABASE_URL, () => {
   console.log("Connected with DB! :)");
 });
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT || 8080, () => {
   console.log("Backend is alive!");
 });
