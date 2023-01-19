@@ -43,7 +43,7 @@ export default function User({ user, setUsers }) {
     };
 
     const res = await axios.delete(
-      `http://localhost:8080/api/users/${user._id}`,
+      `${import.meta.env.VITE_PORT}/users/${user._id}`,
       config
     );
 

@@ -20,7 +20,7 @@ export default function UpdateUser() {
     };
 
     const res = await axios.get(
-      `http://localhost:8080/api/users/${id}`,
+      `${import.meta.env.VITE_PORT}/users/${id}`,
       config
     );
 
@@ -70,7 +70,7 @@ export default function UpdateUser() {
     };
 
     const res = await axios.put(
-      `http://localhost:8080/api/users/${id}`,
+      `${import.meta.env.VITE_PORT}/users/${id}`,
       data,
       config
     );

@@ -52,7 +52,7 @@ export default function Profile() {
     };
 
     const res = await axios.get(
-      `http://localhost:8080/api/users/${user._id}`,
+      `${import.meta.env.VITE_PORT}/users/${user._id}`,
       config
     );
 
@@ -103,7 +103,7 @@ export default function Profile() {
     };
 
     const res = await axios.put(
-      `http://localhost:8080/api/users/${user._id}`,
+      `${import.meta.env.VITE_PORT}/users/${user._id}`,
       data,
       config
     );
@@ -158,7 +158,7 @@ export default function Profile() {
     };
 
     const res = await axios.delete(
-      `http://localhost:8080/api/users/${user._id}`,
+      `${import.meta.env.VITE_PORT}/users/${user._id}`,
       config
     );
 

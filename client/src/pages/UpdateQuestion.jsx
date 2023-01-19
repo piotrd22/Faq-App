@@ -11,7 +11,7 @@ export default function UpdateQuestion() {
   const { user } = useSelector((state) => state.auth);
 
   const getQuestion = async () => {
-    const res = await axios.get(`http://localhost:8080/api/questions/${id}`);
+    const res = await axios.get(`${import.meta.env.VITE_PORT}/questions/${id}`);
 
     return res.data;
   };
@@ -59,7 +59,7 @@ export default function UpdateQuestion() {
     };
 
     const res = await axios.put(
-      `http://localhost:8080/api/questions/${id}`,
+      `${import.meta.env.VITE_PORT}/questions/${id}`,
       data,
       config
     );

@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import Comment from "../components/Comment";
 
 export default function More() {
-  const { user } = useSelector((state) => state.auth);
   const id = useParams().id;
   const [question, setQuestion] = useState({});
   const [comments, setComments] = useState([]);
@@ -39,7 +37,7 @@ export default function More() {
   };
 
   const fetchQuestion = async () => {
-    const res = await axios.get(`http://localhost:8080/api/questions/${id}`);
+    const res = await axios.get(`${import.meta.env.VITE_PORT}/questions/${id}`);
 
     return res.data;
   };
@@ -54,7 +52,7 @@ export default function More() {
   }, []);
 
   const fetchPostComment = async (data) => {
-    const res = await axios.post(`http://localhost:8080/api/comments`, data);
+    const res = await axios.post(`${import.meta.env.VITE_PORT}/comments`, data);
 
     return res.data;
   };

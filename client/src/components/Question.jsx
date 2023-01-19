@@ -43,7 +43,7 @@ export default function Question({ question, setQuestions }) {
     };
 
     const res = await axios.delete(
-      `http://localhost:8080/api/questions/${question._id}`,
+      `${import.meta.env.VITE_PORT}/questions/${question._id}`,
       config
     );
 

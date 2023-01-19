@@ -5,6 +5,8 @@ import { ToastContainer, toast } from "react-toastify";
 import Swal from "sweetalert2";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import Filter from "bad-words";
+import { profanityList } from "../assets/profanity";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Reply from "./Reply";
@@ -24,6 +26,10 @@ export default function Comment({ comment, setComments }) {
       progress: undefined,
       theme: "dark",
     });
+
+  const filter = new Filter();
+
+  filter.addWords(...profanityList);
 
   const notifyDelete = () =>
     toast.success("Comment has been deleted!", {
@@ -58,7 +64,7 @@ export default function Comment({ comment, setComments }) {
     };
 
     const res = await axios.delete(
-      `http://localhost:8080/api/comments/${comment._id}`,
+      `${import.meta.env.VITE_PORT}/comments/${comment._id}`,
       config
     );
 
@@ -143,9 +149,23 @@ export default function Comment({ comment, setComments }) {
 
   return (
     <div className="flex flex-wrap border border-base-300 bg-base-100 rounded-box p-6 my-3">
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
       <div className="w-3/4">
-        <div className="font-bold text-lg">{comment.username}</div>
-        <div>{comment.body}</div>
+        <div className="font-bold text-lg">
+          {filter.clean(comment.username)}
+        </div>
+        <div>{filter.clean(comment.body)}</div>
       </div>
       <div className="flex items-end justify-end w-1/4">
         <div className="flex items-center">
