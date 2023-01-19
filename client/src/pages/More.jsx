@@ -113,9 +113,9 @@ export default function More() {
         <div className=" text-xl font-medium">{question.body}</div>
         <div className="mt-3">
           <p>{question.answer}</p>
-          <div className="flex justify-between items-end">
+          <div className="flex justify-end items-end">
             <div>
-              <p className="mt-3">
+              <p className="mt-3 text-right">
                 {new Date(question.updatedAt).toLocaleDateString()}
               </p>
             </div>
@@ -125,7 +125,7 @@ export default function More() {
 
       <div className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box p-3 my-6">
         <input type="checkbox" className="peer" />
-        <div className="collapse-title text-xl font-medium">Add comment</div>
+        <div className="collapse-title text-xl font-medium">Add comment +</div>
         <div className="collapse-content ">
           <form
             className="mt-6 sm:w-full lg:w-1/2 flex flex-col justify-items-center mx-auto"
