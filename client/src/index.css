@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.w-full > .collapse-title, :where(.collapse > input[type="checkbox"]) {
+    @apply min-h-0 p-0;
+  }
