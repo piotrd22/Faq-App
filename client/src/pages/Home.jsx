@@ -7,10 +7,12 @@ import { useSelector } from "react-redux";
 
 export default function Home() {
   const [questions, setQuesions] = useState([]);
-  const [sortBy, setSortBy] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams({});
   const [search, setSearch] = useState(
     searchParams.get("search") ? searchParams.get("search") : ""
+  );
+  const [sort, setSort] = useState(
+    searchParams.get("sort") ? searchParams.get("sort") : ""
   );
   const [resultsFor, setResultsFor] = useState(
     search ? `Results for: ${search}` : ""
@@ -21,11 +23,28 @@ export default function Home() {
   const getQuestions = async () => {
     try {
       const searchParam = searchParams.get("search");
+      const sortParam = searchParams.get("sort");
       const url = `${import.meta.env.VITE_PORT}/questions`;
-      const response = await axios.get(
-        searchParam ? url + `?search=${search}` : url
-      );
-      setQuesions(response.data);
+
+      if ((searchParam, sortParam)) {
+        const response = await axios.get(
+          url + `?search=${search}&sort=${sort}`
+        );
+        setQuesions(response.data);
+        return response.data;
+      } else if (searchParam) {
+        const response = await axios.get(url + `?search=${search}`);
+        setQuesions(response.data);
+        return response.data;
+      } else if (sortParam) {
+        const response = await axios.get(url + `?sort=${sort}`);
+        setQuesions(response.data);
+        return response.data;
+      } else {
+        const response = await axios.get(url);
+        setQuesions(response.data);
+        return response.data;
+      }
     } catch (error) {
       console.log(error);
     }
@@ -37,14 +56,26 @@ export default function Home() {
     setResultsFor(`Results for: ${search}`);
   };
 
+  const handleSort = (e) => {
+    e.preventDefault();
+    setSort(e.target.value);
+    setSearchParams(
+      searchParams.get("search")
+        ? { search: search, sort: e.target.value }
+        : { sort: e.target.value }
+    );
+  };
+
   const clearSearch = () => {
     setSearchParams({});
     setResultsFor("");
     setSearch("");
+    setSort("");
   };
 
   useEffect(() => {
     setSearch(searchParams.get("search") ? searchParams.get("search") : "");
+    setSort(searchParams.get("sort") ? searchParams.get("sort") : "");
     getQuestions();
     setResultsFor(
       searchParams.get("search")
@@ -53,26 +84,13 @@ export default function Home() {
     );
   }, [searchParams]);
 
-  const questionComponents = questions
-    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-    .map((question) => (
-      <Question
-        key={question._id}
-        question={question}
-        setQuestions={setQuesions}
-      />
-    ));
-
-  const reverseQuestionComponent = questions
-    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-    .reverse()
-    .map((question) => (
-      <Question
-        key={question._id}
-        question={question}
-        setQuestions={setQuesions}
-      />
-    ));
+  const questionComponents = questions.map((question) => (
+    <Question
+      key={question._id}
+      question={question}
+      setQuestions={setQuesions}
+    />
+  ));
 
   return (
     <div className="container mx-auto p-3">
@@ -107,13 +125,14 @@ export default function Home() {
         </form>
         <select
           className="select w-full max-w-xs input-bordered"
-          defaultValue={"DEFAULT"}
+          onChange={handleSort}
+          value={sort}
         >
-          <option disabled value="DEFAULT">
+          <option disabled value="">
             Sort by:
           </option>
-          <option onClick={() => setSortBy(true)}>From the latest</option>
-          <option onClick={() => setSortBy(false)}>From the oldest</option>
+          <option value="desc">From the latest</option>
+          <option value="asc">From the oldest</option>
         </select>
       </div>
       {resultsFor && (
@@ -129,7 +148,7 @@ export default function Home() {
           Add new Question
         </Link>
       )}
-      {sortBy ? questionComponents : reverseQuestionComponent}
+      {questionComponents}
     </div>
   );
 }

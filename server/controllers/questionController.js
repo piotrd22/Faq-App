@@ -4,9 +4,28 @@ const Comment = require("../models/commentSchema");
 
 const getQuestions = async (req, res) => {
   try {
-    const { search } = req.query;
+    const { search, sort } = req.query;
 
-    if (search) {
+    if (search && sort) {
+      const questions = await Question.aggregate([
+        {
+          $project: {
+            content: { $concat: ["$body", " ", "$answer"] },
+            body: 1,
+            answer: 1,
+            createdAt: 1,
+            updatedAt: 1,
+            _id: 1,
+            comments: 1,
+          },
+        },
+        { $match: { content: { $regex: new RegExp(search), $options: "i" } } },
+        { $sort: { updatedAt: sort === "asc" ? 1 : -1 } },
+      ]);
+
+      await Comment.populate(questions, { path: "comments" });
+      return res.status(200).json(questions);
+    } else if (search) {
       const questions = await Question.aggregate([
         {
           $project: {
@@ -24,9 +43,14 @@ const getQuestions = async (req, res) => {
 
       await Comment.populate(questions, { path: "comments" });
       return res.status(200).json(questions);
+    } else if (sort) {
+      const questions = await Question.find({})
+        .sort({ updatedAt: sort === "asc" ? 1 : -1 })
+        .populate("comments");
+      return res.status(200).json(questions);
     }
 
-    const questions = await Question.find({}).populate("comments");
+    const questions = await Question.find({}).sort({updatedAt: -1}).populate("comments");
     res.status(200).json(questions);
   } catch (error) {
     res.status(500).json(error);
