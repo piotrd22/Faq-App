@@ -26,11 +26,13 @@ const questionRouter = require("./routes/questionRoute");
 const authRouter = require("./routes/authRoute");
 const commentRoute = require("./routes/commentRoute");
 const userRoute = require("./routes/userRoute");
+const replyRoute = require("./routes/replyRoute");
 
 app.use("/api/questions", questionRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/comments", commentRoute);
 app.use("/api/users", userRoute);
+app.use("/api/replies", replyRoute);
 
 mongoose.set("strictQuery", false);
 
