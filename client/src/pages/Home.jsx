@@ -20,7 +20,7 @@ export default function Home() {
   const getQuestions = async () => {
     try {
       const searchParam = searchParams.get("search");
-      const url = "http://localhost:8080/api/questions";
+      const url = `${import.meta.env.VITE_PORT}/questions`;
       const response = await axios.get(
         searchParam ? url + `?search=${search}` : url
       );

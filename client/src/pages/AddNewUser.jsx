@@ -44,7 +44,7 @@ export default function AddNewUser() {
     };
 
     const res = await axios.post(
-      `http://localhost:8080/api/auth/signup`,
+      `${import.meta.env.VITE_PORT}/auth/signup`,
       data,
       config
     );

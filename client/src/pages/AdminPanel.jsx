@@ -10,7 +10,7 @@ export default function AdminPanel() {
 
   const getUsers = async () => {
     try {
-      const url = "http://localhost:8080/api/users";
+      const url = `${import.meta.env.VITE_PORT}/users`;
       const config = {
         headers: {
           token: "Bearer " + user.accessToken,

@@ -39,7 +39,7 @@ export default function More() {
   };
 
   const fetchQuestion = async () => {
-    const res = await axios.get(`http://localhost:8080/api/questions/${id}`);
+    const res = await axios.get(`${import.meta.env.VITE_PORT}/questions/${id}`);
 
     return res.data;
   };
@@ -54,7 +54,7 @@ export default function More() {
   }, []);
 
   const fetchPostComment = async (data) => {
-    const res = await axios.post(`http://localhost:8080/api/comments`, data);
+    const res = await axios.post(`${import.meta.env.VITE_PORT}/comments`, data);
 
     return res.data;
   };

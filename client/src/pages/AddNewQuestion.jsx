@@ -41,7 +41,7 @@ export default function AddNewQuestion() {
     };
 
     const res = await axios.post(
-      `http://localhost:8080/api/questions`,
+      `${import.meta.env.VITE_PORT}/questions`,
       data,
       config
     );

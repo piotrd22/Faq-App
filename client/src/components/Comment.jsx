@@ -41,7 +41,7 @@ export default function Comment({ comment, setComments }) {
     };
 
     const res = await axios.delete(
-      `http://localhost:8080/api/comments/${comment._id}`,
+      `${import.meta.env.VITE_PORT}/comments/${comment._id}`,
       config
     );
 
@@ -74,6 +74,18 @@ export default function Comment({ comment, setComments }) {
 
   return (
     <div className="flex justify-between border border-base-300 bg-base-100 rounded-box p-6 my-3">
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
       <div>
         <div className="font-bold text-lg">{comment.username}</div>
         <div>{comment.body}</div>
