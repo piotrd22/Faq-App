@@ -1,5 +1,6 @@
 const Comment = require("../models/commentSchema");
 const Question = require("../models/questionSchema");
+const Reply = require("../models/replySchema");
 
 const createComment = async (req, res) => {
   try {
@@ -40,8 +41,10 @@ const updateComment = async (req, res) => {
 const deleteComment = async (req, res) => {
   try {
     const { id } = req.user;
+    const currComment = Comment.findById(req.params.id);
 
     if (id) {
+      await Reply.deleteMany({ _id: { $in: currComment.replies } });
       await Comment.findByIdAndDelete(req.params.id);
       res.status(200).json("Comment successfully deleted.");
     } else {
@@ -52,4 +55,13 @@ const deleteComment = async (req, res) => {
   }
 };
 
-module.exports = { createComment, updateComment, deleteComment };
+const getComment = async (req, res) => {
+  try {
+    const comment = await Comment.findById(req.params.id).populate("replies");
+    res.status(200).json(comment);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+module.exports = { createComment, updateComment, deleteComment, getComment };

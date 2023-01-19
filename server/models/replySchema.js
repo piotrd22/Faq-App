@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const CommentSchema = new Schema(
+const ReplySchema = new Schema(
   {
     username: {
       type: String,
@@ -13,16 +13,10 @@ const CommentSchema = new Schema(
       required: true,
       max: 400,
     },
-    replies: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Reply",
-      },
-    ],
   },
   { timestamps: true }
 );
 
-const Comment = mongoose.model("Comment", CommentSchema);
+const Reply = mongoose.model("Reply", ReplySchema);
 
-module.exports = Comment;
+module.exports = Reply;

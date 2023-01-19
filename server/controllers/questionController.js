@@ -23,7 +23,6 @@ const getQuestions = async (req, res) => {
       ]);
 
       await Comment.populate(questions, { path: "comments" });
-
       return res.status(200).json(questions);
     }
 
@@ -76,8 +75,10 @@ const deleteQuestion = async (req, res) => {
   try {
     const { id } = req.user;
     const user = await User.findById(id);
+    const currQuestion = await Question.findById(req.params.id);
 
     if (user.admin) {
+      await Comment.deleteMany({ _id: { $in: currQuestion.comments } });
       await Question.findByIdAndDelete(req.params.id);
       res.status(200).json("Question successfully deleted.");
     } else {
