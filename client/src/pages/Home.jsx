@@ -105,7 +105,7 @@ export default function Home() {
             </button>
           </div>
         </form>
-        <select className="select w-full max-w-xs" defaultValue={"DEFAULT"}>
+        <select className="select w-full max-w-xs input-bordered" defaultValue={"DEFAULT"}>
           <option disabled value="DEFAULT">
             Sort by:
           </option>
@@ -114,8 +114,8 @@ export default function Home() {
         </select>
       </div>
       {resultsFor && (
-        <div className="flex justify-between">
-          <div className="my-7 text-lg">{resultsFor}</div>
+        <div className="flex items-center justify-between mt-5">
+          <div className="text-lg">{resultsFor}</div>
           <button onClick={clearSearch} className="btn btn-active">
             CLEAR SEARCH
           </button>
