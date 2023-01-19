@@ -28,7 +28,7 @@ const updateReply = async (req, res) => {
 
     if (id) {
       await Reply.findByIdAndUpdate(req.params.id, { $set: req.body });
-      res.status(200).json("Reply successfully updated.");
+      res.status(200).json("Comment successfully updated.");
     } else {
       res.status(401).json("You are not allowed");
     }
@@ -43,7 +43,7 @@ const deleteReply = async (req, res) => {
 
     if (id) {
       await Reply.findByIdAndDelete(req.params.id);
-      res.status(200).json("Reply successfully deleted.");
+      res.status(200).json("Comment successfully deleted.");
     } else {
       res.status(401).json("You are not allowed");
     }
