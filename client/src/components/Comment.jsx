@@ -97,7 +97,7 @@ export default function Comment({ comment, setComments }) {
 
   const getReplies = async () => {
     const res = await axios.get(
-      `http://localhost:8080/api/comments/${comment._id}`
+      `${import.meta.env.VITE_PORT}/comments/${comment._id}`
     );
     const resp = await res.data.replies;
     setReplies(resp);
@@ -119,7 +119,7 @@ export default function Comment({ comment, setComments }) {
   } = useForm();
 
   const fetchPostReply = async (data) => {
-    const res = await axios.post(`http://localhost:8080/api/replies`, data);
+    const res = await axios.post(`${import.meta.env.VITE_PORT}/replies`, data);
 
     return res.data;
   };
@@ -149,18 +149,6 @@ export default function Comment({ comment, setComments }) {
 
   return (
     <div className="flex flex-wrap border border-base-300 bg-base-100 rounded-box p-6 my-3">
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
       <div className="w-3/4">
         <div className="font-bold text-lg">
           {filter.clean(comment.username)}

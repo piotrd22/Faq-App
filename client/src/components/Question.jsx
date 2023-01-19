@@ -76,18 +76,6 @@ export default function Question({ question, setQuestions }) {
 
   return (
     <div className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box p-3 my-6">
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
       <input type="checkbox" className="peer" />
       <div className="collapse-title text-xl font-medium">{question.body}</div>
       <div className="collapse-content ">

@@ -76,18 +76,6 @@ export default function User({ user, setUsers }) {
 
   return (
     <div className="w-full flex items-center border border-base-300 bg-base-100 rounded-xl p-3 my-4">
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
       <div className="flex justify-between w-1/2 px-5">
         <h5 className="font-bold">{user.username}</h5>
       </div>

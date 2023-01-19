@@ -105,7 +105,10 @@ export default function Home() {
             </button>
           </div>
         </form>
-        <select className="select w-full max-w-xs input-bordered" defaultValue={"DEFAULT"}>
+        <select
+          className="select w-full max-w-xs input-bordered"
+          defaultValue={"DEFAULT"}
+        >
           <option disabled value="DEFAULT">
             Sort by:
           </option>

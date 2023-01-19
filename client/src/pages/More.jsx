@@ -105,14 +105,13 @@ export default function More() {
         pauseOnHover
         theme="dark"
       />
-
       <Link to="/" className="btn">
         &#8592; Back
       </Link>
       <div className="flex flex-col justify-items-center mt-6 border border-base-300 bg-base-100 rounded-box p-6 my-6">
         <div className=" text-xl font-medium">{question.body}</div>
         <div className="mt-3">
-          <p>{question.answer}</p>
+          <p className="whitespace-pre">{question.answer}</p>
           <div className="flex justify-end items-end">
             <div>
               <p className="mt-3 text-right">

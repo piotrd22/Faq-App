@@ -94,7 +94,6 @@ export default function AddNewUser() {
         pauseOnHover
         theme="dark"
       />
-
       <Link to="/admin-panel" className="btn">
         &#8592; Back
       </Link>

@@ -110,7 +110,6 @@ export default function UpdateQuestion() {
         pauseOnHover
         theme="dark"
       />
-
       <Link to="/" className="btn">
         &#8592; Back
       </Link>
