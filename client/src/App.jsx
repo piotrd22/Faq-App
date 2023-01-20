@@ -11,6 +11,7 @@ import UpdateQuestion from "./pages/UpdateQuestion";
 import More from "./pages/More";
 import UpdateUser from "./pages/UpdateUser";
 import NotFound from "./pages/NotFound";
+import AdminStats from "./pages/AdminStats";
 
 function App() {
   const { user } = useSelector((state) => state.auth);
@@ -38,6 +39,12 @@ function App() {
           path="/admin-panel"
           element={
             user && user.admin ? <AdminPanel /> : <Navigate to="/admin" />
+          }
+        />
+        <Route
+          path="/admin-stats"
+          element={
+            user && user.admin ? <AdminStats /> : <Navigate to="/admin" />
           }
         />
         <Route

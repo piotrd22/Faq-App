@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import Question from "../components/Question";
-import { useSearchParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import { useSearchParams, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 export default function Home() {
@@ -94,6 +94,18 @@ export default function Home() {
 
   return (
     <div className="container mx-auto p-3">
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
       <div className="flex justify-between">
         <form className="form-control" onSubmit={handleSearch}>
           <div className="input-group">
