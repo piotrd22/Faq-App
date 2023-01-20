@@ -99,15 +99,25 @@ export default function AddNewQuestion() {
         <input
           className="input input-bordered w-full"
           type="text"
-          {...register("question", { required: true })}
+          {...register("question", {
+            required: "This field is required!",
+            pattern: {
+              value: /^[^\s]+(?:$|.*[^\s]+$)/g,
+              message: "This field can't start or end with whitespace!",
+            },
+          })}
         />
-        {errors.question && <div className="my-2">This field is required!</div>}
+        {errors.question && (
+          <div className="my-2">{errors.question.message}</div>
+        )}
         <label className="mt-5 mb-2">Answer</label>
         <textarea
           className="textarea textarea-bordered w-full h-52"
-          {...register("answer", { required: true })}
+          {...register("answer", {
+            required: "This field is required!",
+          })}
         />
-        {errors.answer && <div className="my-2">This field is required!</div>}
+        {errors.answer && <div className="my-2">{errors.answer.message}</div>}
 
         <button className="btn my-5 mx-auto flex">Add question</button>
       </form>

@@ -134,23 +134,37 @@ export default function More() {
               type="text"
               placeholder="Username (optional)"
               className="input input-bordered w-full my-3"
-              {...register("username")}
+              {...register("username", {
+                pattern: {
+                  value: /^[^\s]+(?:$|.*[^\s]+$)/g,
+                  message: "This field can't start or end with whitespace!",
+                },
+              })}
             />
+            {errors.username && (
+              <div className="my-2">{errors.username.message}</div>
+            )}
             <input
               placeholder="Comment..."
-              className="input input-bordered w-full"
+              className="input input-bordered w-full my-3"
               type="text"
-              {...register("comment", { required: true })}
+              {...register("comment", {
+                required: "This field is required!",
+                pattern: {
+                  value: /^[^\s]+(?:$|.*[^\s]+$)/g,
+                  message: "This field can't start or end with whitespace!",
+                },
+              })}
             />
             {errors.comment && (
-              <div className="my-2">This field is required!</div>
+              <div className="my-2">{errors.comment.message}</div>
             )}
             <button className="btn my-5 mx-auto flex">ADD COMMENT</button>
           </form>
         </div>
       </div>
 
-      <h2 className="text-2xl mt-20">Comments: </h2>
+      {comments.length > 0 && <h2 className="text-2xl mt-20">Comments: </h2>}
 
       {commentComponents}
     </div>
