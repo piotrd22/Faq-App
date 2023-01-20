@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import Comment from "../components/Comment";
+import DOMPurify from "dompurify";
 
 export default function More() {
   const id = useParams().id;
@@ -111,7 +112,12 @@ export default function More() {
       <div className="flex flex-col justify-items-center mt-6 border border-base-300 bg-base-100 rounded-box p-6 my-6">
         <div className=" text-xl font-medium">{question.body}</div>
         <div className="mt-3">
-          <p className="whitespace-pre-wrap">{question.answer}</p>
+          <p
+            className="whitespace-pre-wrap"
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(question.answer),
+            }}
+          ></p>
           <div className="flex justify-end items-end">
             <div>
               <p className="mt-3 text-right">

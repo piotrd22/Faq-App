@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import DOMPurify from "dompurify";
 
 export default function Question({ question, setQuestions }) {
   const { user } = useSelector((state) => state.auth);
@@ -79,7 +80,12 @@ export default function Question({ question, setQuestions }) {
       <input type="checkbox" className="peer" />
       <div className="collapse-title text-xl font-medium">{question.body}</div>
       <div className="collapse-content ">
-        <p className="whitespace-pre-wrap">{question.answer}</p>
+        <p
+          className="whitespace-pre-wrap"
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(question.answer),
+          }}
+        ></p>
         <div className="flex justify-between items-end">
           <div>
             <p className="mt-5">
