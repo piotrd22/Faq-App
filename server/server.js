@@ -34,12 +34,14 @@ const authRouter = require("./routes/authRoute");
 const commentRoute = require("./routes/commentRoute");
 const userRoute = require("./routes/userRoute");
 const replyRoute = require("./routes/replyRoute");
+const statsRoute = require("./routes/statsRoute");
 
 app.use("/api/questions", questionRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/comments", commentRoute);
 app.use("/api/users", userRoute);
 app.use("/api/replies", replyRoute);
+app.use("/api/stats", statsRoute);
 
 mongoose.set("strictQuery", false);
 
