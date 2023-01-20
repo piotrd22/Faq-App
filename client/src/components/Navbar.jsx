@@ -8,6 +8,7 @@ import { FiUser } from "react-icons/fi";
 import { FiLogOut } from "react-icons/fi";
 import { FiUsers } from "react-icons/fi";
 import { FiSettings } from "react-icons/fi";
+import { TfiStatsUp } from "react-icons/tfi";
 import { themeChange } from "theme-change";
 import { useEffect } from "react";
 
@@ -45,7 +46,7 @@ export default function Navbar() {
           </span>
         </Link>
 
-        <ul className="menu menu-horizontal flex items-center justify-center px-1">
+        <ul className="menu menu-horizontal flex items-center justify-center px-1 ">
           <li className="mx-2">
             <select
               className="select select-bordered w-32"
@@ -63,7 +64,7 @@ export default function Navbar() {
               <a>
                 <FiSettings className="text-4xl" />
               </a>
-              <ul className="p-2 border-base-300 bg-base-100 absolute right-0 border">
+              <ul className="p-2 border-base-300 bg-base-100 absolute right-0 border z-50">
                 <li>
                   <Link to="/profile">
                     <FiUser className="text-4xl mx-3" />
@@ -75,6 +76,14 @@ export default function Navbar() {
                     <Link to="/admin-panel">
                       <FiUsers className="text-4xl mx-3" />
                       Users
+                    </Link>
+                  </li>
+                )}
+                {user.admin && (
+                  <li>
+                    <Link to="/admin-stats">
+                      <TfiStatsUp className="text-4xl mx-3" />
+                      Stats
                     </Link>
                   </li>
                 )}

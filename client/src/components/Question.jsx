@@ -2,7 +2,7 @@ import { ImBin } from "react-icons/im";
 import { FiEdit } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
