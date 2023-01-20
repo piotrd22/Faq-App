@@ -11,7 +11,7 @@ const getStats = async (req, res) => {
 
     if (search === "month") {
       const lastMonthDate = new Date(
-        currentDate.setHour(currentDate.getHour() - 720)
+        currentDate.setHours(currentDate.getHours() - 720)
       );
       const comments = await Comment.find({
         createdAt: { $gt: lastMonthDate },
@@ -29,9 +29,7 @@ const getStats = async (req, res) => {
       };
 
       return res.status(200).json(objToRes);
-    }
-
-    if (search === "day") {
+    } else if (search === "day") {
       const lastDayDate = new Date(
         currentDate.setHours(currentDate.getHours() - 24)
       );
@@ -49,9 +47,7 @@ const getStats = async (req, res) => {
       };
 
       return res.status(200).json(objToRes);
-    }
-
-    if (search === "week") {
+    } else if (search === "week") {
       const lastWeekDate = new Date(
         currentDate.setHours(currentDate.getHours() - 168)
       );
@@ -69,9 +65,7 @@ const getStats = async (req, res) => {
       };
 
       return res.status(200).json(objToRes);
-    }
-
-    if (search === "year") {
+    } else if (search === "year") {
       const lastYearDate = new Date(
         currentDate.setHours(currentDate.getHours() - 8760)
       );
@@ -102,7 +96,7 @@ const getStats = async (req, res) => {
       users: users.length,
     };
 
-    return res.status(200).json(objToRes);
+    res.status(200).json(objToRes);
   } catch (error) {
     res.status(500).json(error);
   }

@@ -1,6 +1,7 @@
 const Question = require("../models/questionSchema");
 const User = require("../models/userSchema");
 const Comment = require("../models/commentSchema");
+const Reply = require("../models/replySchema");
 
 const getQuestions = async (req, res) => {
   try {
@@ -104,9 +105,15 @@ const deleteQuestion = async (req, res) => {
     const currQuestion = await Question.findById(req.params.id);
 
     if (user.admin) {
+      const comments = await Comment.find({
+        _id: { $in: currQuestion.comments },
+      });
+      const repliesArrays = comments.map((comment) => comment.replies);
+      const repliesIds = repliesArrays.flatMap((id) => id);
+      await Reply.deleteMany({ _id: { $in: repliesIds } });
       await Comment.deleteMany({ _id: { $in: currQuestion.comments } });
       await Question.findByIdAndDelete(req.params.id);
-      res.status(200).json("Question successfully deleted.");
+      res.status(200).json(repliesIds);
     } else {
       res.status(401).json("You are not allowed");
     }
