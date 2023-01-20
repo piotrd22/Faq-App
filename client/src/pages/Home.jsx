@@ -107,13 +107,16 @@ export default function Home() {
         pauseOnHover
         theme="dark"
       />
-      <div className="flex justify-between">
-        <form className="form-control" onSubmit={handleSubmit(handleSearch)}>
-          <div className="input-group">
+      <div className="w-full flex justify-between flex-wrap">
+        <form
+          className="w-full sm:w-1/3 form-control"
+          onSubmit={handleSubmit(handleSearch)}
+        >
+          <div className="w-full input-group">
             <input
               type="text"
               placeholder="Search…"
-              className="input input-bordered"
+              className="input input-bordered w-full"
               {...register("search", {
                 required: "This field is required!",
                 pattern: {
@@ -144,7 +147,7 @@ export default function Home() {
           </div>
         </form>
         <select
-          className="select w-full max-w-xs input-bordered"
+          className="select w-full sm:w-1/3 input-bordered"
           onChange={handleSort}
           value={sort}
         >

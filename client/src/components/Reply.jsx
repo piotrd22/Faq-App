@@ -69,12 +69,12 @@ export default function ({ reply, setReplies }) {
     });
   };
   return (
-    <div className="flex w-full flex-wrap border border-base-300 bg-base-100 rounded-box p-6 my-1">
-      <div className="w-3/4">
+    <div className="flex w-full flex-wrap border border-base-300 bg-base-100 rounded-box p-3 my-1">
+      <div className="w-full">
         <div className="font-bold text-lg">{reply.username}</div>
         <div>{reply.body}</div>
       </div>
-      <div className="flex items-end justify-end w-1/4">
+      <div className="flex items-end justify-end w-full mt-2">
         <div className="flex items-center">
           <div className="mx-2">
             {new Date(reply.createdAt).toLocaleDateString()}
