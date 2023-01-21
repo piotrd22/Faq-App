@@ -5,9 +5,11 @@ import { ToastContainer } from "react-toastify";
 import { useSearchParams, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
+import { useBottomScrollListener } from "react-bottom-scroll-listener";
 
 export default function Home() {
   const [questions, setQuesions] = useState([]);
+  const [skip, setSkip] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams({});
   const [sort, setSort] = useState(
     searchParams.get("sort") ? searchParams.get("sort") : ""
@@ -20,7 +22,7 @@ export default function Home() {
 
   const { user } = useSelector((state) => state.auth);
 
-  const getQuestions = async () => {
+  const getQuestions = async (skip = 0, shouldClear = false) => {
     try {
       const searchParam = searchParams.get("search");
       const sortParam = searchParams.get("sort");
@@ -28,18 +30,35 @@ export default function Home() {
 
       if (searchParam && sortParam) {
         const response = await axios.get(
-          url + `?search=${searchParam}&sort=${sort}`
+          url +
+            (`?search=${searchParam}&sort=${sort}` +
+              (shouldClear ? "" : `&skip=${skip}`))
         );
-        setQuesions(response.data);
+        shouldClear
+          ? setQuesions([...response.data])
+          : setQuesions([...questions, ...response.data]);
       } else if (searchParam) {
-        const response = await axios.get(url + `?search=${searchParam}`);
-        setQuesions(response.data);
+        const response = await axios.get(
+          url +
+            (`?search=${searchParam}` + (shouldClear ? "" : `&skip=${skip}`))
+        );
+        shouldClear
+          ? setQuesions([...response.data])
+          : setQuesions([...questions, ...response.data]);
       } else if (sortParam) {
-        const response = await axios.get(url + `?sort=${sort}`);
-        setQuesions(response.data);
+        const response = await axios.get(
+          url + (`?sort=${sort}` + (shouldClear ? "" : `&skip=${skip}`))
+        );
+        shouldClear
+          ? setQuesions(response.data)
+          : setQuesions([...questions, ...response.data]);
       } else {
-        const response = await axios.get(url);
-        setQuesions(response.data);
+        const response = await axios.get(
+          url + (shouldClear ? "" : `?skip=${skip}`)
+        );
+        shouldClear
+          ? setQuesions([...response.data])
+          : setQuesions([...questions, ...response.data]);
       }
     } catch (error) {
       console.log(error);
@@ -62,6 +81,8 @@ export default function Home() {
     );
   };
 
+  useBottomScrollListener(() => setSkip(questions.length));
+
   const clearSearch = () => {
     setSearchParams({});
     setResultsFor("");
@@ -70,7 +91,7 @@ export default function Home() {
 
   useEffect(() => {
     setSort(searchParams.get("sort") ? searchParams.get("sort") : "");
-    getQuestions();
+    getQuestions(0, true);
     setResultsFor(
       searchParams.get("search")
         ? `Results for: ${searchParams.get("search")}`
@@ -78,7 +99,11 @@ export default function Home() {
     );
   }, [searchParams]);
 
-  const questionComponents = questions.map((question) => (
+  useEffect(() => {
+    getQuestions(skip);
+  }, [skip]);
+
+  const questionComponents = questions?.map((question) => (
     <Question
       key={question._id}
       question={question}
@@ -94,7 +119,7 @@ export default function Home() {
   } = useForm();
 
   return (
-    <div className="container mx-auto p-3">
+    <div className="container mx-auto p-3 min-h-screen">
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -172,7 +197,7 @@ export default function Home() {
         </Link>
       )}
       {questions.length > 0 ? (
-        questionComponents
+        <div>{questionComponents}</div>
       ) : (
         <div className="my-3 text-center">No questions</div>
       )}
