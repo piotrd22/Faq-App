@@ -6,6 +6,8 @@ const Reply = require("../models/replySchema");
 const getQuestions = async (req, res) => {
   try {
     const { search, sort } = req.query;
+    const skip = +req.query.skip || 0;
+    const limit = 6;
 
     if (search && sort) {
       const questions = await Question.aggregate([
@@ -22,6 +24,8 @@ const getQuestions = async (req, res) => {
         },
         { $match: { content: { $regex: new RegExp(search), $options: "i" } } },
         { $sort: { updatedAt: sort === "asc" ? 1 : -1 } },
+        { $skip: skip },
+        { $limit: limit },
       ]);
 
       await Comment.populate(questions, { path: "comments" });
@@ -40,6 +44,8 @@ const getQuestions = async (req, res) => {
           },
         },
         { $match: { content: { $regex: new RegExp(search), $options: "i" } } },
+        { $skip: skip },
+        { $limit: limit },
       ]);
 
       await Comment.populate(questions, { path: "comments" });
@@ -47,12 +53,16 @@ const getQuestions = async (req, res) => {
     } else if (sort) {
       const questions = await Question.find({})
         .sort({ updatedAt: sort === "asc" ? 1 : -1 })
+        .skip(skip)
+        .limit(limit)
         .populate("comments");
       return res.status(200).json(questions);
     }
 
     const questions = await Question.find({})
       .sort({ updatedAt: -1 })
+      .skip(skip)
+      .limit(limit)
       .populate("comments");
     res.status(200).json(questions);
   } catch (error) {
