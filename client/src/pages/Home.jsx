@@ -5,12 +5,13 @@ import { ToastContainer } from "react-toastify";
 import { useSearchParams, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import { useBottomScrollListener } from "react-bottom-scroll-listener";
+import { AiOutlineArrowUp } from "react-icons/ai";
 
 export default function Home() {
   const [questions, setQuesions] = useState([]);
   const [skip, setSkip] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams({});
+  const [isTop, setIsTop] = useState(true);
   const [sort, setSort] = useState(
     searchParams.get("sort") ? searchParams.get("sort") : ""
   );
@@ -81,7 +82,37 @@ export default function Home() {
     );
   };
 
-  useBottomScrollListener(() => setSkip(questions.length));
+  useEffect(() => {
+    const onScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } =
+        document.documentElement;
+
+      if (scrollTop === 0) {
+        setIsTop(true);
+      }
+
+      if (scrollTop !== 0) {
+        setIsTop(false);
+      }
+
+      //infinite scroll pagination
+      if (scrollTop + clientHeight >= scrollHeight - 10) {
+        setSkip(questions.length);
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, {
+      passive: true,
+    });
+    return () => window.removeEventListener("scroll", onScroll);
+  });
+
+  const goToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
 
   const clearSearch = () => {
     setSearchParams({});
@@ -200,6 +231,14 @@ export default function Home() {
         <div>{questionComponents}</div>
       ) : (
         <div className="my-3 text-center">No questions</div>
+      )}
+      {!isTop && (
+        <button
+          className="btn btn-square fixed bottom-3 right-3 z-50 "
+          onClick={goToTop}
+        >
+          <AiOutlineArrowUp />
+        </button>
       )}
     </div>
   );
