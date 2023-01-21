@@ -3,6 +3,8 @@ export const profanityList = [
   "chuj",
   "pierdole",
   "ja pierdole",
+  "hwdp",
+  "chwdp",
   "kutas",
   "jebać",
   "jebac",
