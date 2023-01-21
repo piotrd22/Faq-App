@@ -4,18 +4,18 @@ import Question from "../components/Question";
 import { ToastContainer } from "react-toastify";
 import { useSearchParams, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
 
 export default function Home() {
   const [questions, setQuesions] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams({});
-  const [search, setSearch] = useState(
-    searchParams.get("search") ? searchParams.get("search") : ""
-  );
   const [sort, setSort] = useState(
     searchParams.get("sort") ? searchParams.get("sort") : ""
   );
   const [resultsFor, setResultsFor] = useState(
-    search ? `Results for: ${search}` : ""
+    searchParams.get("search")
+      ? `Results for: ${searchParams.get("search")}`
+      : ""
   );
 
   const { user } = useSelector((state) => state.auth);
@@ -26,34 +26,30 @@ export default function Home() {
       const sortParam = searchParams.get("sort");
       const url = `${import.meta.env.VITE_PORT}/questions`;
 
-      if ((searchParam, sortParam)) {
+      if (searchParam && sortParam) {
         const response = await axios.get(
-          url + `?search=${search}&sort=${sort}`
+          url + `?search=${searchParam}&sort=${sort}`
         );
         setQuesions(response.data);
-        return response.data;
       } else if (searchParam) {
-        const response = await axios.get(url + `?search=${search}`);
+        const response = await axios.get(url + `?search=${searchParam}`);
         setQuesions(response.data);
-        return response.data;
       } else if (sortParam) {
         const response = await axios.get(url + `?sort=${sort}`);
         setQuesions(response.data);
-        return response.data;
       } else {
         const response = await axios.get(url);
         setQuesions(response.data);
-        return response.data;
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    setSearchParams({ search: search });
-    setResultsFor(`Results for: ${search}`);
+  const handleSearch = (data) => {
+    setSearchParams({ search: data.search });
+    setResultsFor(`Results for: ${data.search}`);
+    reset();
   };
 
   const handleSort = (e) => {
@@ -61,7 +57,7 @@ export default function Home() {
     setSort(e.target.value);
     setSearchParams(
       searchParams.get("search")
-        ? { search: search, sort: e.target.value }
+        ? { search: searchParams.get("search"), sort: e.target.value }
         : { sort: e.target.value }
     );
   };
@@ -69,12 +65,10 @@ export default function Home() {
   const clearSearch = () => {
     setSearchParams({});
     setResultsFor("");
-    setSearch("");
     setSort("");
   };
 
   useEffect(() => {
-    setSearch(searchParams.get("search") ? searchParams.get("search") : "");
     setSort(searchParams.get("sort") ? searchParams.get("sort") : "");
     getQuestions();
     setResultsFor(
@@ -92,6 +86,13 @@ export default function Home() {
     />
   ));
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
+
   return (
     <div className="container mx-auto p-3">
       <ToastContainer
@@ -106,16 +107,23 @@ export default function Home() {
         pauseOnHover
         theme="dark"
       />
-      <div className="flex justify-between">
-        <form className="form-control" onSubmit={handleSearch}>
-          <div className="input-group">
+      <div className="w-full flex justify-between flex-wrap">
+        <form
+          className="w-full sm:w-1/3 form-control"
+          onSubmit={handleSubmit(handleSearch)}
+        >
+          <div className="w-full input-group">
             <input
               type="text"
               placeholder="Search…"
-              className="input input-bordered"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              required
+              className="input input-bordered w-full"
+              {...register("search", {
+                required: "This field is required!",
+                pattern: {
+                  value: /^[^\s]+(?:$|.*[^\s]+$)/g,
+                  message: "This field can't start or end with whitespace!",
+                },
+              })}
             />
             <button className="btn btn-square">
               <svg
@@ -134,9 +142,12 @@ export default function Home() {
               </svg>
             </button>
           </div>
+          <div className="my-2 h-5">
+            {errors.search ? errors.search.message : ""}
+          </div>
         </form>
         <select
-          className="select w-full max-w-xs input-bordered"
+          className="select w-full sm:w-1/3 input-bordered"
           onChange={handleSort}
           value={sort}
         >
@@ -160,7 +171,11 @@ export default function Home() {
           Add new Question
         </Link>
       )}
-      {questionComponents}
+      {questions.length > 0 ? (
+        questionComponents
+      ) : (
+        <div className="my-3 text-center">No questions</div>
+      )}
     </div>
   );
 }

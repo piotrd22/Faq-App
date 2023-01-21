@@ -218,25 +218,48 @@ export default function Profile() {
         <input
           className="input input-bordered w-full"
           type="text"
-          {...register("login", { required: true })}
+          {...register("login", {
+            required: "This field is required!",
+            pattern: {
+              value: /^[^\s]+(?:$|.*[^\s]+$)/g,
+              message: "This field can't start or end with whitespace!",
+            },
+          })}
         />
-        {errors.login && <div className="my-2">This field is required!</div>}
+        {errors.login && <div className="my-2">{errors.login.message}</div>}
         <label className="mt-5 mb-2">Old password</label>
         <input
           className="input input-bordered w-full"
           type="password"
-          {...register("old_password")}
+          {...register("old_password", {
+            required: "This field is required!",
+            pattern: {
+              value: /^[^\s]+(?:$|.*[^\s]+$)/g,
+              message: "This field can't start or end with whitespace!",
+            },
+          })}
         />
+        {errors.old_password && (
+          <div className="my-2">{errors.old_password.message}</div>
+        )}
         <label className="mt-5 mb-2">New Password</label>
         <input
           className="input input-bordered w-full"
           type="password"
           {...register("password", {
             onChange: (e) => setPassword(e.target.value),
+            required: "This field is required!",
+            pattern: {
+              value: /^[^\s]+(?:$|.*[^\s]+$)/g,
+              message: "This field can't start or end with whitespace!",
+            },
           })}
         />
         {password && (
           <PasswordStrengthBar password={password} className="mt-2" />
+        )}
+        {errors.password && (
+          <div className="my-2">{errors.password.message}</div>
         )}
         {user && user.admin && (
           <div className="form-control my-2">

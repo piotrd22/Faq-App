@@ -38,7 +38,7 @@ export default function Navbar() {
         <Link to="/" className="flex items-center">
           <img
             src={theme === "dark" ? logo : logo_black}
-            className="h-36 mr-3 sm:h-36"
+            className="h-20 mr-3 sm:h-36"
             alt="UG Logo"
           />
           <span className="self-center text-xl font-semibold ">

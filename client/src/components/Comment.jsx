@@ -148,14 +148,14 @@ export default function Comment({ comment, setComments }) {
   ));
 
   return (
-    <div className="flex flex-wrap border border-base-300 bg-base-100 rounded-box p-6 my-3">
-      <div className="w-3/4">
+    <div className="flex flex-wrap border border-base-300 bg-base-100 rounded-box p-3 my-3">
+      <div className="w-full">
         <div className="font-bold text-lg">
           {filter.clean(comment.username)}
         </div>
         <div>{filter.clean(comment.body)}</div>
       </div>
-      <div className="flex items-end justify-end w-1/4">
+      <div className="flex items-end justify-end w-full mt-2">
         <div className="flex items-center">
           <div className="mx-2">
             {new Date(comment.createdAt).toLocaleDateString()}
@@ -173,7 +173,7 @@ export default function Comment({ comment, setComments }) {
             Reply
             <ImReply className="mx-2" />
           </div>
-          <div className="collapse-content ">
+          <div className="collapse-content p-0">
             <form
               className="mt-6 sm:w-full lg:w-1/2 flex flex-col justify-items-center mx-auto"
               onSubmit={handleSubmit(onSubmit)}
@@ -182,16 +182,30 @@ export default function Comment({ comment, setComments }) {
                 type="text"
                 placeholder="Username (optional)"
                 className="input input-bordered w-full my-3"
-                {...register("username")}
+                {...register("username", {
+                  pattern: {
+                    value: /^[^\s]+(?:$|.*[^\s]+$)/g,
+                    message: "This field can't start or end with whitespace!",
+                  },
+                })}
               />
+              {errors.username && (
+                <div className="my-2">{errors.comment.message}</div>
+              )}
               <input
                 placeholder="Comment..."
-                className="input input-bordered w-full"
+                className="input input-bordered w-full my-3"
                 type="text"
-                {...register("comment", { required: true })}
+                {...register("comment", {
+                  required: "This field is required!",
+                  pattern: {
+                    value: /^[^\s]+(?:$|.*[^\s]+$)/g,
+                    message: "This field can't start or end with whitespace!",
+                  },
+                })}
               />
               {errors.comment && (
-                <div className="my-2">This field is required!</div>
+                <div className="my-2">{errors.comment.message}</div>
               )}
               <button className="btn my-5 mx-auto flex">REPLY</button>
             </form>
@@ -203,14 +217,14 @@ export default function Comment({ comment, setComments }) {
           <div className="flex collapse-title text-l items-center font-medium">
             {replies.length} {replies.length === 1 ? "reply" : "replies"}
           </div>
-          <div className="collapse-content ">
+          <div className="collapse-content p-0">
             <div className="w-full collapse collapse-arrow border border-base-300 bg-base-100 rounded-box p-3 my-6">
               <input type="checkbox" className="peer p-0 min-h-0" />
               <div className="flex collapse-title text-l items-center font-medium">
                 Reply
                 <ImReply className="mx-2" />
               </div>
-              <div className="collapse-content ">
+              <div className="collapse-content p-0">
                 <form
                   className="mt-6 sm:w-full lg:w-1/2 flex flex-col justify-items-center mx-auto"
                   onSubmit={handleSubmit(onSubmit)}
@@ -219,16 +233,32 @@ export default function Comment({ comment, setComments }) {
                     type="text"
                     placeholder="Username (optional)"
                     className="input input-bordered w-full my-3"
-                    {...register("username")}
+                    {...register("username", {
+                      pattern: {
+                        value: /^[^\s]+(?:$|.*[^\s]+$)/g,
+                        message:
+                          "This field can't start or end with whitespace!",
+                      },
+                    })}
                   />
+                  {errors.username && (
+                    <div className="my-2">{errors.comment.message}</div>
+                  )}
                   <input
                     placeholder="Comment..."
-                    className="input input-bordered w-full"
+                    className="input input-bordered w-full my-3"
                     type="text"
-                    {...register("comment", { required: true })}
+                    {...register("comment", {
+                      required: "This field is required!",
+                      pattern: {
+                        value: /^[^\s]+(?:$|.*[^\s]+$)/g,
+                        message:
+                          "This field can't start or end with whitespace!",
+                      },
+                    })}
                   />
                   {errors.comment && (
-                    <div className="my-2">This field is required!</div>
+                    <div className="my-2">{errors.comment.message}</div>
                   )}
                   <button className="btn my-5 mx-auto flex">REPLY</button>
                 </form>

@@ -105,20 +105,34 @@ export default function AddNewUser() {
         <input
           className="input input-bordered w-full"
           type="text"
-          {...register("username", { required: true })}
+          {...register("username", {
+            required: "This field is required!",
+            pattern: {
+              value: /^[^\s]+(?:$|.*[^\s]+$)/g,
+              message: "This field can't start or end with whitespace!",
+            },
+          })}
         />
-        {errors.username && <div className="my-2">This field is required!</div>}
+        {errors.username && (
+          <div className="my-2">{errors.username.message}</div>
+        )}
         <label className="mt-5 mb-2">Password</label>
         <input
           type="password"
           className="input input-bordered w-full"
           {...register("password", {
-            required: true,
             onChange: (e) => setPassword(e.target.value),
+            required: "This field is required!",
+            pattern: {
+              value: /^[^\s]+(?:$|.*[^\s]+$)/g,
+              message: "This field can't start or end with whitespace!",
+            },
           })}
         />
         <PasswordStrengthBar password={password} className="mt-2" />
-        {errors.password && <div className="mb-2">This field is required!</div>}
+        {errors.password && (
+          <div className="mb-2">{errors.password.message}</div>
+        )}
 
         <div className="form-control my-2">
           <label className="cursor-pointer label">
