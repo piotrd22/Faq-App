@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { ImBin } from "react-icons/im";
 import { ImReply } from "react-icons/im";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
@@ -28,7 +28,6 @@ export default function Comment({ comment, setComments }) {
     });
 
   const filter = new Filter();
-
   filter.addWords(...profanityList);
 
   const notifyDelete = () =>

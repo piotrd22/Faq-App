@@ -1,12 +1,18 @@
 import { ImBin } from "react-icons/im";
 import { useSelector } from "react-redux";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import Filter from "bad-words";
+import { profanityList } from "../assets/profanity";
 
 export default function ({ reply, setReplies }) {
   const { user } = useSelector((state) => state.auth);
+
+  const filter = new Filter();
+  filter.addWords(...profanityList);
+
   const notifyDelete = () =>
     toast.success("Comment has been deleted!", {
       position: "top-right",
@@ -71,8 +77,8 @@ export default function ({ reply, setReplies }) {
   return (
     <div className="flex w-full flex-wrap border border-base-300 bg-base-100 rounded-box p-3 my-1">
       <div className="w-full">
-        <div className="font-bold text-lg">{reply.username}</div>
-        <div>{reply.body}</div>
+        <div className="font-bold text-lg">{filter.clean(reply.username)}</div>
+        <div>{filter.clean(reply.body)}</div>
       </div>
       <div className="flex items-end justify-end w-full mt-2">
         <div className="flex items-center">
