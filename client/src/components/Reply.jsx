@@ -86,9 +86,9 @@ export default function ({ reply, setReplies }) {
       <div className="w-full">
         <div className="font-bold text-lg">{filter.clean(reply.username)}</div>
         <div>
-          {removeEmojis(comment.body).length > 0
-            ? filter.clean(comment.body)
-            : comment.body}
+          {removeEmojis(reply.body).length > 0
+            ? filter.clean(reply.body)
+            : reply.body}
         </div>
       </div>
       <div className="flex items-end justify-end w-full mt-2">
