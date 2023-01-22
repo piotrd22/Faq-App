@@ -8,6 +8,9 @@ import Comment from "../components/Comment";
 import DOMPurify from "dompurify";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
+import { MdOutlineEmojiEmotions } from "react-icons/md";
+import { MdClose } from "react-icons/md";
+import { AiOutlineArrowUp } from "react-icons/ai";
 
 export default function More() {
   const id = useParams().id;
@@ -15,6 +18,7 @@ export default function More() {
   const [comments, setComments] = useState([]);
   const [prevComment, setPrevComment] = useState("");
   const [isEmoji, setIsEmoji] = useState(false);
+  const [isTop, setIsTop] = useState(true);
 
   const notify = () =>
     toast.success("Comment has been added!", {
@@ -55,6 +59,29 @@ export default function More() {
       })
       .catch((error) => console.log(error));
   }, []);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const { scrollTop } = document.documentElement;
+      if (scrollTop === 0) {
+        setIsTop(true);
+      } else {
+        setIsTop(false);
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, {
+      passive: true,
+    });
+    return () => window.removeEventListener("scroll", onScroll);
+  });
+
+  const goToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
 
   const fetchPostComment = async (data) => {
     const res = await axios.post(`${import.meta.env.VITE_PORT}/comments`, data);
@@ -142,8 +169,10 @@ export default function More() {
 
       <div className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box p-3 my-6">
         <input type="checkbox" className="peer" />
-        <div className="collapse-title text-xl font-medium">Add comment +</div>
-        <div className="collapse-content ">
+        <div className="collapse-title text-xl font-medium relative ">
+          Add comment +
+        </div>
+        <div className="collapse-content">
           <form
             className="mt-6 sm:w-full lg:w-1/2 flex flex-col justify-items-center mx-auto"
             onSubmit={handleSubmit(onSubmit)}
@@ -162,37 +191,50 @@ export default function More() {
             {errors.username && (
               <div className="my-2">{errors.username.message}</div>
             )}
-            <input
-              placeholder="Comment..."
-              className="input input-bordered w-full my-3"
-              type="text"
-              {...register("comment", {
-                required: "This field is required!",
-                pattern: {
-                  value: /^[^\s]+(?:$|.*[^\s]+$)/g,
-                  message: "This field can't start or end with whitespace!",
-                },
-              })}
-              onChange={(e) => setPrevComment(e.target.value)}
-            />
+            <div className="flex items-center">
+              <input
+                placeholder="Comment..."
+                className="input input-bordered w-9/12 sm:w-10/12 my-3"
+                type="text"
+                {...register("comment", {
+                  required: "This field is required!",
+                  pattern: {
+                    value: /^[^\s]+(?:$|.*[^\s]+$)/g,
+                    message: "This field can't start or end with whitespace!",
+                  },
+                })}
+                onChange={(e) => setPrevComment(e.target.value)}
+              />
+              <button
+                className="btn w-3/12 sm:w-2/12"
+                onClick={() => setIsEmoji(!isEmoji)}
+                type="button"
+              >
+                {isEmoji ? (
+                  <MdClose className="text-3xl" />
+                ) : (
+                  <MdOutlineEmojiEmotions className="text-3xl" />
+                )}
+              </button>
+            </div>
             {errors.comment && (
               <div className="my-2">{errors.comment.message}</div>
             )}
-            <button
-              className="btn my-5 mx-auto flex"
-              onClick={() => setIsEmoji(!isEmoji)}
-              type="button"
-            >
-              Pick an emoji
-            </button>
-            {isEmoji && (
-              <div className="flex justify-center mx-auto">
-                <Picker data={data} onEmojiSelect={onEmojiSelect} />
-              </div>
-            )}
-            <button type="submit" className="btn my-5 mx-auto flex">
-              ADD COMMENT
-            </button>
+            <div className="flex justify-between">
+              <button type="submit" className="btn my-5 flex">
+                ADD COMMENT
+              </button>
+              {isEmoji && (
+                <div className="right-0 top-36 z-40">
+                  <Picker
+                    className="w-full z-50"
+                    data={data}
+                    onEmojiSelect={onEmojiSelect}
+                    perLine={5}
+                  />
+                </div>
+              )}
+            </div>
           </form>
         </div>
       </div>
@@ -200,6 +242,15 @@ export default function More() {
       {comments.length > 0 && <h2 className="text-2xl mt-20">Comments: </h2>}
 
       {commentComponents}
+
+      {!isTop && (
+        <button
+          className="btn btn-square fixed bottom-3 right-3 z-50 "
+          onClick={goToTop}
+        >
+          <AiOutlineArrowUp />
+        </button>
+      )}
     </div>
   );
 }
