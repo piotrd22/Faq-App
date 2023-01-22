@@ -1,6 +1,6 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 export default function UpdateUser() {
   const id = useParams().id;
   const { user } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
 
   const [admin, setAdmin] = useState(false);
 
@@ -86,6 +87,7 @@ export default function UpdateUser() {
     fetchUpdateUser(user)
       .then(() => {
         notifyUpdate();
+        navigate("/admin-panel");
       })
       .catch((error) => {
         notifyError();
@@ -97,18 +99,6 @@ export default function UpdateUser() {
 
   return (
     <div className="container mx-auto p-5">
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
       <Link to="/admin-panel" className="btn">
         &#8592; Back
       </Link>

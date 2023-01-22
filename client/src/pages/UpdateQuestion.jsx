@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -11,6 +11,8 @@ import Picker from "@emoji-mart/react";
 export default function UpdateQuestion() {
   const id = useParams().id;
   const { user } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+
   const [prevAnswer, setPrevAnswer] = useState("");
   const [isEmoji, setIsEmoji] = useState(false);
 
@@ -87,12 +89,7 @@ export default function UpdateQuestion() {
     fetchUpdateQuestion(question)
       .then(() => {
         notifyUpdate();
-        getQuestion(id)
-          .then((res) => {
-            setValue("question", res.body, { shouldTouch: true });
-            setValue("answer", res.answer, { shouldTouch: true });
-          })
-          .catch((error) => console.log(error));
+        navigate("/");
       })
       .catch((error) => {
         notifyError();
@@ -109,18 +106,6 @@ export default function UpdateQuestion() {
 
   return (
     <div className="container mx-auto p-5">
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
       <Link to="/" className="btn">
         &#8592; Back
       </Link>

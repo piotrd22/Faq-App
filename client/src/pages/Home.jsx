@@ -1,13 +1,15 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import Question from "../components/Question";
-import { ToastContainer } from "react-toastify";
 import { useSearchParams, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { AiOutlineArrowUp } from "react-icons/ai";
+import Loader from "../components/Loader";
 
 export default function Home() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSkipLoading, setIsSkipLoading] = useState(false);
   const [questions, setQuesions] = useState([]);
   const [skip, setSkip] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams({});
@@ -25,6 +27,7 @@ export default function Home() {
 
   const getQuestions = async (skip = 0, shouldClear = false) => {
     try {
+      setIsSkipLoading(true);
       const searchParam = searchParams.get("search");
       const sortParam = searchParams.get("sort");
       const url = `${import.meta.env.VITE_PORT}/questions`;
@@ -38,6 +41,8 @@ export default function Home() {
         shouldClear
           ? setQuesions([...response.data])
           : setQuesions([...questions, ...response.data]);
+        setIsLoading(false);
+        setIsSkipLoading(false);
       } else if (searchParam) {
         const response = await axios.get(
           url +
@@ -46,6 +51,8 @@ export default function Home() {
         shouldClear
           ? setQuesions([...response.data])
           : setQuesions([...questions, ...response.data]);
+        setIsLoading(false);
+        setIsSkipLoading(false);
       } else if (sortParam) {
         const response = await axios.get(
           url + (`?sort=${sort}` + (shouldClear ? "" : `&skip=${skip}`))
@@ -53,6 +60,8 @@ export default function Home() {
         shouldClear
           ? setQuesions(response.data)
           : setQuesions([...questions, ...response.data]);
+        setIsLoading(false);
+        setIsSkipLoading(false);
       } else {
         const response = await axios.get(
           url + (shouldClear ? "" : `?skip=${skip}`)
@@ -60,8 +69,11 @@ export default function Home() {
         shouldClear
           ? setQuesions([...response.data])
           : setQuesions([...questions, ...response.data]);
+        setIsLoading(false);
+        setIsSkipLoading(false);
       }
     } catch (error) {
+      setIsLoading(false);
       console.log(error);
     }
   };
@@ -149,20 +161,10 @@ export default function Home() {
     reset,
   } = useForm();
 
+  if (isLoading) return <Loader />;
+
   return (
     <div className="container mx-auto p-3 min-h-screen">
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
       <div className="w-full flex justify-between flex-wrap">
         <form
           className="w-full sm:w-1/3 form-control"
@@ -240,6 +242,7 @@ export default function Home() {
           <AiOutlineArrowUp />
         </button>
       )}
+      {isSkipLoading && <Loader />}
     </div>
   );
 }

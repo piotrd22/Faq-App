@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useParams } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import Comment from "../components/Comment";
 import DOMPurify from "dompurify";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
+import Loader from "../components/Loader";
 
 export default function More() {
   const id = useParams().id;
+  const [isLoading, setIsLoading] = useState(true);
   const [question, setQuestion] = useState({});
   const [comments, setComments] = useState([]);
   const [prevComment, setPrevComment] = useState("");
@@ -52,6 +54,7 @@ export default function More() {
       .then((res) => {
         setQuestion(res);
         setComments(res.comments);
+        setIsLoading(false);
       })
       .catch((error) => console.log(error));
   }, []);
@@ -104,20 +107,10 @@ export default function More() {
     <Comment key={comment._id} comment={comment} setComments={setComments} />
   ));
 
+  if (isLoading) return <Loader />;
+
   return (
     <div className="container mx-auto p-5">
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
       <Link to="/" className="btn">
         &#8592; Back
       </Link>

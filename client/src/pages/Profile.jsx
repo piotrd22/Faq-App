@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { logout } from "../features/auth/authSlice";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
@@ -124,21 +124,7 @@ export default function Profile() {
     fetchUpdateUser(dataToSubmit)
       .then(() => {
         notifyUpdate();
-        getUser()
-          .then((res) => {
-            setValue("login", res.username, { shouldTouch: true });
-            setValue("isAdmin", res.admin, { shouldTouch: true });
-            setValue("password", "", { shouldTouch: true });
-            setValue("old_password", "", { shouldTouch: true });
-            setAdmin(res.admin);
-            setInitialState({
-              username: res.username,
-              password: "",
-              old_password: "",
-              admin: res.admin,
-            });
-          })
-          .catch((error) => console.log(error));
+        navigate("/");
       })
       .catch((error) => {
         if (error.response.data) {
@@ -194,18 +180,6 @@ export default function Profile() {
 
   return (
     <div className="container mx-auto p-5">
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
       <Link to="/" className="btn">
         &#8592; Back
       </Link>
@@ -219,7 +193,6 @@ export default function Profile() {
           className="input input-bordered w-full"
           type="text"
           {...register("login", {
-            required: "This field is required!",
             pattern: {
               value: /^[^\s]+(?:$|.*[^\s]+$)/g,
               message: "This field can't start or end with whitespace!",
@@ -232,7 +205,6 @@ export default function Profile() {
           className="input input-bordered w-full"
           type="password"
           {...register("old_password", {
-            required: "This field is required!",
             pattern: {
               value: /^[^\s]+(?:$|.*[^\s]+$)/g,
               message: "This field can't start or end with whitespace!",
@@ -248,7 +220,6 @@ export default function Profile() {
           type="password"
           {...register("password", {
             onChange: (e) => setPassword(e.target.value),
-            required: "This field is required!",
             pattern: {
               value: /^[^\s]+(?:$|.*[^\s]+$)/g,
               message: "This field can't start or end with whitespace!",
