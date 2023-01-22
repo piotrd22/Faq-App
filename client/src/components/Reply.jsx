@@ -74,11 +74,22 @@ export default function ({ reply, setReplies }) {
       }
     });
   };
+
+  const removeEmojis = (str) => {
+    const emojiRegex =
+      /(\p{EPres}|\p{ExtPict})(\u200d(\p{EPres}|\p{ExtPict}))*/gu;
+    return str.replace(emojiRegex, "");
+  };
+
   return (
     <div className="flex w-full flex-wrap border border-base-300 bg-base-100 rounded-box p-3 my-1">
       <div className="w-full">
         <div className="font-bold text-lg">{filter.clean(reply.username)}</div>
-        <div>{filter.clean(reply.body)}</div>
+        <div>
+          {removeEmojis(comment.body).length > 0
+            ? filter.clean(comment.body)
+            : comment.body}
+        </div>
       </div>
       <div className="flex items-end justify-end w-full mt-2">
         <div className="flex items-center">

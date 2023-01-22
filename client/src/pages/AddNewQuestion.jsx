@@ -1,12 +1,17 @@
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
 
 export default function AddNewQuestion() {
   const { user } = useSelector((state) => state.auth);
+  const [prevAnswer, setPrevAnswer] = useState("");
+  const [isEmoji, setIsEmoji] = useState(false);
 
   const notify = () =>
     toast.success("Question has been added!", {
@@ -49,14 +54,22 @@ export default function AddNewQuestion() {
     return res.data;
   };
 
+  const onEmojiSelect = (e) => {
+    setPrevAnswer((prev) => prev + e.native);
+    setValue("answer", prevAnswer + e.native, { shouldTouch: true });
+  };
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm();
 
   const onSubmit = (data) => {
+    setPrevAnswer("");
+    setIsEmoji(false);
     const question = {
       body: data.question,
       answer: data.answer,
@@ -116,10 +129,24 @@ export default function AddNewQuestion() {
           {...register("answer", {
             required: "This field is required!",
           })}
+          onChange={(e) => setPrevAnswer(e.target.value)}
         />
         {errors.answer && <div className="my-2">{errors.answer.message}</div>}
-
-        <button className="btn my-5 mx-auto flex">Add question</button>
+        <button
+          className="btn my-5 mx-auto flex"
+          onClick={() => setIsEmoji(!isEmoji)}
+          type="button"
+        >
+          Pick an emoji
+        </button>
+        {isEmoji && (
+          <div className="flex justify-center">
+            <Picker data={data} onEmojiSelect={onEmojiSelect} />
+          </div>
+        )}
+        <button type="submit" className="btn my-5 mx-auto flex">
+          Add question
+        </button>
       </form>
     </div>
   );

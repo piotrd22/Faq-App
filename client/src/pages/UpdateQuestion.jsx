@@ -4,11 +4,15 @@ import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
 
 export default function UpdateQuestion() {
   const id = useParams().id;
   const { user } = useSelector((state) => state.auth);
+  const [prevAnswer, setPrevAnswer] = useState("");
+  const [isEmoji, setIsEmoji] = useState(false);
 
   const getQuestion = async () => {
     const res = await axios.get(`${import.meta.env.VITE_PORT}/questions/${id}`);
@@ -67,7 +71,14 @@ export default function UpdateQuestion() {
     return res.data;
   };
 
+  const onEmojiSelect = (e) => {
+    setPrevAnswer((prev) => prev + e.native);
+    setValue("answer", prevAnswer + e.native, { shouldTouch: true });
+  };
+
   const onSubmit = (data) => {
+    setPrevAnswer("");
+    setIsEmoji(false);
     const question = {
       body: data.question,
       answer: data.answer,
@@ -138,10 +149,25 @@ export default function UpdateQuestion() {
           {...register("answer", {
             required: "This field is required!",
           })}
+          onChange={(e) => setPrevAnswer(e.target.value)}
         />
         {errors.answer && <div className="my-2">{errors.answer.message}</div>}
+        <button
+          className="btn my-5 mx-auto flex"
+          onClick={() => setIsEmoji(!isEmoji)}
+          type="button"
+        >
+          Pick an emoji
+        </button>
+        {isEmoji && (
+          <div className="flex justify-center">
+            <Picker data={data} onEmojiSelect={onEmojiSelect} />
+          </div>
+        )}
 
-        <button className="btn my-5 mx-auto flex">UPDATE QUESTION</button>
+        <button type="submit" className="btn my-5 mx-auto flex">
+          UPDATE QUESTION
+        </button>
       </form>
     </div>
   );
