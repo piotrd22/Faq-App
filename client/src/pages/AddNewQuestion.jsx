@@ -7,6 +7,8 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
+import { MdOutlineEmojiEmotions } from "react-icons/md";
+import { MdClose } from "react-icons/md";
 
 export default function AddNewQuestion() {
   const { user } = useSelector((state) => state.auth);
@@ -92,7 +94,7 @@ export default function AddNewQuestion() {
         &#8592; Back
       </Link>
       <form
-        className="sm:w-full lg:w-1/2 flex flex-col justify-items-center mx-auto"
+        className="sm:w-full lg:w-1/2 flex flex-col justify-items-center mx-auto relative"
         onSubmit={handleSubmit(onSubmit)}
       >
         <label className="mt-5 mb-2">Question</label>
@@ -119,21 +121,29 @@ export default function AddNewQuestion() {
           onChange={(e) => setPrevAnswer(e.target.value)}
         />
         {errors.answer && <div className="my-2">{errors.answer.message}</div>}
-        <button
-          className="btn my-5 mx-auto flex"
-          onClick={() => setIsEmoji(!isEmoji)}
-          type="button"
-        >
-          Pick an emoji
-        </button>
+
+        <div className="flex justify-between">
+          <button type="submit" className="btn my-5 flex">
+            Add question
+          </button>
+          <button
+            className="btn my-5 flex text-3xl"
+            onClick={() => setIsEmoji(!isEmoji)}
+            type="button"
+          >
+            {isEmoji ? <MdClose /> : <MdOutlineEmojiEmotions />}
+          </button>
+        </div>
         {isEmoji && (
-          <div className="flex justify-center">
-            <Picker data={data} onEmojiSelect={onEmojiSelect} />
+          <div className="absolute right-0 bottom-16">
+            <Picker
+              className="w-full"
+              data={data}
+              onEmojiSelect={onEmojiSelect}
+              perLine={5}
+            />
           </div>
         )}
-        <button type="submit" className="btn my-5 mx-auto flex">
-          Add question
-        </button>
       </form>
     </div>
   );

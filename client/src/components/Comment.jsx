@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import { ImBin } from "react-icons/im";
 import { ImReply } from "react-icons/im";
 import { toast } from "react-toastify";
+import { MdOutlineEmojiEmotions } from "react-icons/md";
 import Swal from "sweetalert2";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
@@ -12,6 +13,7 @@ import { useForm } from "react-hook-form";
 import Reply from "./Reply";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
+import { MdClose } from "react-icons/md";
 
 export default function Comment({ comment, setComments }) {
   const { user } = useSelector((state) => state.auth);
@@ -188,15 +190,15 @@ export default function Comment({ comment, setComments }) {
       </div>
 
       {replies.length === 0 ? (
-        <div className="w-full collapse collapse-arrow border border-base-300 bg-base-100 rounded-box p-3 my-6">
+        <div className="w-full collapse collapse-arrow border border-base-300 bg-base-100 rounded-box p-3 my-6 ">
           <input type="checkbox" className="peer p-0 min-h-0" />
-          <div className="flex collapse-title text-l items-center font-medium">
+          <div className="flex collapse-title text-l items-center font-medium ">
             Reply
             <ImReply className="mx-2" />
           </div>
-          <div className="collapse-content p-0">
+          <div className="collapse-content p-0 ">
             <form
-              className="mt-6 sm:w-full lg:w-1/2 flex flex-col justify-items-center mx-auto"
+              className="mt-6 sm:w-full lg:w-1/2 flex flex-col justify-items-center mx-auto relative "
               onSubmit={handleSubmit(onSubmit)}
             >
               <input
@@ -213,37 +215,51 @@ export default function Comment({ comment, setComments }) {
               {errors.username && (
                 <div className="my-2">{errors.comment.message}</div>
               )}
-              <input
-                placeholder="Comment..."
-                className="input input-bordered w-full my-3"
-                type="text"
-                {...register("comment", {
-                  required: "This field is required!",
-                  pattern: {
-                    value: /^[^\s]+(?:$|.*[^\s]+$)/g,
-                    message: "This field can't start or end with whitespace!",
-                  },
-                })}
-                onChange={(e) => setPrevComment(e.target.value)}
-              />
+              <div className="flex items-center">
+                <input
+                  placeholder="Comment..."
+                  className="input input-bordered w-9/12 sm:w-10/12 my-3"
+                  type="text"
+                  {...register("comment", {
+                    required: "This field is required!",
+                    pattern: {
+                      value: /^[^\s]+(?:$|.*[^\s]+$)/g,
+                      message: "This field can't start or end with whitespace!",
+                    },
+                  })}
+                  onChange={(e) => setPrevComment(e.target.value)}
+                />
+                <button
+                  className="btn w-3/12 sm:w-2/12"
+                  onClick={() => setIsEmoji(!isEmoji)}
+                  type="button"
+                >
+                  {isEmoji ? (
+                    <MdClose className="text-3xl" />
+                  ) : (
+                    <MdOutlineEmojiEmotions className="text-3xl" />
+                  )}
+                </button>
+              </div>
+
               {errors.comment && (
                 <div className="my-2">{errors.comment.message}</div>
               )}
-              <button
-                className="btn my-5 mx-auto flex"
-                onClick={() => setIsEmoji(!isEmoji)}
-                type="button"
-              >
-                Pick an emoji
-              </button>
-              {isEmoji && (
-                <div className="flex justify-center">
-                  <Picker data={data} onEmojiSelect={onEmojiSelect} />
-                </div>
-              )}
-              <button type="submit" className="btn my-5 mx-auto flex">
-                REPLY
-              </button>
+              <div className="flex justify-between">
+                <button type="submit" className="btn my-5 flex">
+                  REPLY
+                </button>
+                {isEmoji && (
+                  <div className="right-0 top-36 z-40">
+                    <Picker
+                      className="w-full z-50"
+                      data={data}
+                      onEmojiSelect={onEmojiSelect}
+                      perLine={5}
+                    />
+                  </div>
+                )}
+              </div>
             </form>
           </div>
         </div>
@@ -254,15 +270,15 @@ export default function Comment({ comment, setComments }) {
             {replies.length} {replies.length === 1 ? "reply" : "replies"}
           </div>
           <div className="collapse-content p-0">
-            <div className="w-full collapse collapse-arrow border border-base-300 bg-base-100 rounded-box p-3 my-6">
+            <div className="w-full collapse collapse-arrow border border-base-300 bg-base-100 rounded-box p-3 my-6 ">
               <input type="checkbox" className="peer p-0 min-h-0" />
-              <div className="flex collapse-title text-l items-center font-medium">
+              <div className="flex collapse-title text-l items-center font-medium ">
                 Reply
                 <ImReply className="mx-2" />
               </div>
-              <div className="collapse-content p-0">
+              <div className="collapse-content p-0 ">
                 <form
-                  className="mt-6 sm:w-full lg:w-1/2 flex flex-col justify-items-center mx-auto"
+                  className="mt-6 sm:w-full lg:w-1/2 flex flex-col justify-items-center mx-auto relative "
                   onSubmit={handleSubmit(onSubmit)}
                 >
                   <input
@@ -280,38 +296,52 @@ export default function Comment({ comment, setComments }) {
                   {errors.username && (
                     <div className="my-2">{errors.comment.message}</div>
                   )}
-                  <input
-                    placeholder="Comment..."
-                    className="input input-bordered w-full my-3"
-                    type="text"
-                    {...register("comment", {
-                      required: "This field is required!",
-                      pattern: {
-                        value: /^[^\s]+(?:$|.*[^\s]+$)/g,
-                        message:
-                          "This field can't start or end with whitespace!",
-                      },
-                    })}
-                    onChange={(e) => setPrevComment(e.target.value)}
-                  />
+                  <div className="flex items-center">
+                    <input
+                      placeholder="Comment..."
+                      className="input input-bordered w-9/12 sm:w-10/12 my-3"
+                      type="text"
+                      {...register("comment", {
+                        required: "This field is required!",
+                        pattern: {
+                          value: /^[^\s]+(?:$|.*[^\s]+$)/g,
+                          message:
+                            "This field can't start or end with whitespace!",
+                        },
+                      })}
+                      onChange={(e) => setPrevComment(e.target.value)}
+                    />
+                    <button
+                      className="btn w-3/12 sm:w-2/12"
+                      onClick={() => setIsEmoji(!isEmoji)}
+                      type="button"
+                    >
+                      {isEmoji ? (
+                        <MdClose className="text-3xl" />
+                      ) : (
+                        <MdOutlineEmojiEmotions className="text-3xl" />
+                      )}
+                    </button>
+                  </div>
                   {errors.comment && (
                     <div className="my-2">{errors.comment.message}</div>
                   )}
-                  <button
-                    className="btn my-5 mx-auto flex"
-                    onClick={() => setIsEmoji(!isEmoji)}
-                    type="button"
-                  >
-                    Pick an emoji
-                  </button>
-                  {isEmoji && (
-                    <div className="flex justify-center">
-                      <Picker data={data} onEmojiSelect={onEmojiSelect} />
-                    </div>
-                  )}
-                  <button type="submit" className="btn my-5 mx-auto flex">
-                    REPLY
-                  </button>
+
+                  <div className="flex justify-between">
+                    <button type="submit" className="btn my-5 flex">
+                      REPLY
+                    </button>
+                    {isEmoji && (
+                      <div className="right-0 top-36 z-40">
+                        <Picker
+                          className="w-full z-50"
+                          data={data}
+                          onEmojiSelect={onEmojiSelect}
+                          perLine={5}
+                        />
+                      </div>
+                    )}
+                  </div>
                 </form>
               </div>
             </div>
