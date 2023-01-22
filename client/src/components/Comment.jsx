@@ -10,10 +10,14 @@ import { profanityList } from "../assets/profanity";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Reply from "./Reply";
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
 
 export default function Comment({ comment, setComments }) {
   const { user } = useSelector((state) => state.auth);
   const [replies, setReplies] = useState([]);
+  const [prevComment, setPrevComment] = useState("");
+  const [isEmoji, setIsEmoji] = useState(false);
 
   const notify = () =>
     toast.success("Reply has been added!", {
@@ -110,11 +114,17 @@ export default function Comment({ comment, setComments }) {
     }
   }, []);
 
+  const onEmojiSelect = (e) => {
+    setPrevComment((prev) => prev + e.native);
+    setValue("comment", prevComment + e.native, { shouldTouch: true });
+  };
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm();
 
   const fetchPostReply = async (data) => {
@@ -124,6 +134,8 @@ export default function Comment({ comment, setComments }) {
   };
 
   const onSubmit = (data) => {
+    setPrevComment("");
+    setIsEmoji(false);
     const reply = {
       body: data.comment,
       username: data.username ? data.username : "Guest",
@@ -146,13 +158,23 @@ export default function Comment({ comment, setComments }) {
     <Reply key={x._id} reply={x} setReplies={setReplies} />
   ));
 
+  const removeEmojis = (str) => {
+    const emojiRegex =
+      /(\p{EPres}|\p{ExtPict})(\u200d(\p{EPres}|\p{ExtPict}))*/gu;
+    return str.replace(emojiRegex, "");
+  };
+
   return (
     <div className="flex flex-wrap border border-base-300 bg-base-100 rounded-box p-3 my-3">
       <div className="w-full">
         <div className="font-bold text-lg">
           {filter.clean(comment.username)}
         </div>
-        <div>{filter.clean(comment.body)}</div>
+        <div>
+          {removeEmojis(comment.body).length > 0
+            ? filter.clean(comment.body)
+            : comment.body}
+        </div>
       </div>
       <div className="flex items-end justify-end w-full mt-2">
         <div className="flex items-center">
@@ -202,11 +224,26 @@ export default function Comment({ comment, setComments }) {
                     message: "This field can't start or end with whitespace!",
                   },
                 })}
+                onChange={(e) => setPrevComment(e.target.value)}
               />
               {errors.comment && (
                 <div className="my-2">{errors.comment.message}</div>
               )}
-              <button className="btn my-5 mx-auto flex">REPLY</button>
+              <button
+                className="btn my-5 mx-auto flex"
+                onClick={() => setIsEmoji(!isEmoji)}
+                type="button"
+              >
+                Pick an emoji
+              </button>
+              {isEmoji && (
+                <div className="flex justify-center">
+                  <Picker data={data} onEmojiSelect={onEmojiSelect} />
+                </div>
+              )}
+              <button type="submit" className="btn my-5 mx-auto flex">
+                REPLY
+              </button>
             </form>
           </div>
         </div>
@@ -255,11 +292,26 @@ export default function Comment({ comment, setComments }) {
                           "This field can't start or end with whitespace!",
                       },
                     })}
+                    onChange={(e) => setPrevComment(e.target.value)}
                   />
                   {errors.comment && (
                     <div className="my-2">{errors.comment.message}</div>
                   )}
-                  <button className="btn my-5 mx-auto flex">REPLY</button>
+                  <button
+                    className="btn my-5 mx-auto flex"
+                    onClick={() => setIsEmoji(!isEmoji)}
+                    type="button"
+                  >
+                    Pick an emoji
+                  </button>
+                  {isEmoji && (
+                    <div className="flex justify-center">
+                      <Picker data={data} onEmojiSelect={onEmojiSelect} />
+                    </div>
+                  )}
+                  <button type="submit" className="btn my-5 mx-auto flex">
+                    REPLY
+                  </button>
                 </form>
               </div>
             </div>

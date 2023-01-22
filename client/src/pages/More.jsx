@@ -6,11 +6,15 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import Comment from "../components/Comment";
 import DOMPurify from "dompurify";
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
 
 export default function More() {
   const id = useParams().id;
   const [question, setQuestion] = useState({});
   const [comments, setComments] = useState([]);
+  const [prevComment, setPrevComment] = useState("");
+  const [isEmoji, setIsEmoji] = useState(false);
 
   const notify = () =>
     toast.success("Comment has been added!", {
@@ -62,14 +66,22 @@ export default function More() {
     setComments((prev) => [newComment, ...prev]);
   };
 
+  const onEmojiSelect = (e) => {
+    setPrevComment((prev) => prev + e.native);
+    setValue("comment", prevComment + e.native, { shouldTouch: true });
+  };
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm();
 
   const onSubmit = (data) => {
+    setPrevComment("");
+    setIsEmoji(false);
     const comment = {
       body: data.comment,
       username: data.username ? data.username : "Guest",
@@ -161,11 +173,26 @@ export default function More() {
                   message: "This field can't start or end with whitespace!",
                 },
               })}
+              onChange={(e) => setPrevComment(e.target.value)}
             />
             {errors.comment && (
               <div className="my-2">{errors.comment.message}</div>
             )}
-            <button className="btn my-5 mx-auto flex">ADD COMMENT</button>
+            <button
+              className="btn my-5 mx-auto flex"
+              onClick={() => setIsEmoji(!isEmoji)}
+              type="button"
+            >
+              Pick an emoji
+            </button>
+            {isEmoji && (
+              <div className="flex justify-center mx-auto">
+                <Picker data={data} onEmojiSelect={onEmojiSelect} />
+              </div>
+            )}
+            <button type="submit" className="btn my-5 mx-auto flex">
+              ADD COMMENT
+            </button>
           </form>
         </div>
       </div>
