@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { ToastContainer } from "react-toastify";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import AdminLogin from "./pages/AdminLogin";
@@ -19,6 +20,18 @@ function App() {
   return (
     <div className="App">
       <Navbar />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route
