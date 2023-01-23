@@ -8,6 +8,6 @@ router.get("/:id", commentController.getComment);
 
 router.put("/:id", verifyToken, commentController.updateComment);
 
-router.delete("/:id", verifyToken, commentController.deleteComment);
+router.delete("/:id/:questionId", verifyToken, commentController.deleteComment);
 
 module.exports = router;

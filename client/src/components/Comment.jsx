@@ -14,8 +14,10 @@ import Reply from "./Reply";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { MdClose } from "react-icons/md";
+import { useParams } from "react-router-dom";
 
 export default function Comment({ comment, setComments }) {
+  const { id } = useParams();
   const { user } = useSelector((state) => state.auth);
   const [replies, setReplies] = useState([]);
   const [prevComment, setPrevComment] = useState("");
@@ -69,7 +71,7 @@ export default function Comment({ comment, setComments }) {
     };
 
     const res = await axios.delete(
-      `${import.meta.env.VITE_PORT}/comments/${comment._id}`,
+      `${import.meta.env.VITE_PORT}/comments/${comment._id}/${id}`,
       config
     );
 
@@ -157,7 +159,12 @@ export default function Comment({ comment, setComments }) {
   };
 
   const replyComponents = replies.map((x) => (
-    <Reply key={x._id} reply={x} setReplies={setReplies} />
+    <Reply
+      key={x._id}
+      reply={x}
+      setReplies={setReplies}
+      commentId={comment._id}
+    />
   ));
 
   const removeEmojis = (str) => {

@@ -41,10 +41,14 @@ const updateComment = async (req, res) => {
 const deleteComment = async (req, res) => {
   try {
     const { id } = req.user;
-    const currComment = Comment.findById(req.params.id);
+    const currComment = await Comment.findById(req.params.id);
 
     if (id) {
       await Reply.deleteMany({ _id: { $in: currComment.replies } });
+      await Question.updateOne(
+        { _id: req.params.questionId },
+        { $pull: { comments: req.params.id } }
+      );
       await Comment.findByIdAndDelete(req.params.id);
       res.status(200).json("Comment successfully deleted.");
     } else {

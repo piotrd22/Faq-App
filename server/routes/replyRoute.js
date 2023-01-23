@@ -6,6 +6,6 @@ router.post("/", replyController.createReply);
 
 router.put("/:id", verifyToken, replyController.updateReply);
 
-router.delete("/:id", verifyToken, replyController.deleteReply);
+router.delete("/:id/:commentId", verifyToken, replyController.deleteReply);
 
 module.exports = router;

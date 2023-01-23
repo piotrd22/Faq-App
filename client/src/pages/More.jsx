@@ -14,7 +14,7 @@ import { MdClose } from "react-icons/md";
 import { AiOutlineArrowUp } from "react-icons/ai";
 
 export default function More() {
-  const id = useParams().id;
+  const { id } = useParams();
   const [isLoading, setIsLoading] = useState(true);
   const [question, setQuestion] = useState({});
   const [comments, setComments] = useState([]);

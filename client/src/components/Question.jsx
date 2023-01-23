@@ -101,7 +101,7 @@ export default function Question({ question, setQuestions }) {
             </div>
           )}
           <Link to={`/more/${question._id}`}>
-            <button className="btn mt-3">COMMENTS</button>
+            <button className="btn mt-3">COMMENTS ({question.comments.length})</button>
           </Link>
         </div>
       </div>

@@ -42,6 +42,10 @@ const deleteReply = async (req, res) => {
     const { id } = req.user;
 
     if (id) {
+      await Comment.updateOne(
+        { _id: req.params.commentId },
+        { $pull: { replies: req.params.id } }
+      );
       await Reply.findByIdAndDelete(req.params.id);
       res.status(200).json("Comment successfully deleted.");
     } else {
