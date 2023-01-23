@@ -7,7 +7,7 @@ import axios from "axios";
 import Filter from "bad-words";
 import { profanityList } from "../assets/profanity";
 
-export default function ({ reply, setReplies }) {
+export default function ({ reply, setReplies, commentId }) {
   const { user } = useSelector((state) => state.auth);
 
   const filter = new Filter();
@@ -45,7 +45,7 @@ export default function ({ reply, setReplies }) {
     };
 
     const res = await axios.delete(
-      `${import.meta.env.VITE_PORT}/replies/${reply._id}`,
+      `${import.meta.env.VITE_PORT}/replies/${reply._id}/${commentId}`,
       config
     );
 
